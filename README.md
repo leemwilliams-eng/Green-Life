@@ -1,5 +1,5 @@
 
- <img width="712" height="567" alt="Green Life" src="https://github.com/user-attachments/assets/57f7be8f-b4ff-41c1-a560-79dfe75225d6" />
+ <img width="312" height="167" alt="Green Life" src="https://github.com/user-attachments/assets/57f7be8f-b4ff-41c1-a560-79dfe75225d6" />
  
  # Green Life
 
@@ -26,4 +26,5 @@ Green Life is a React Native mobile app concept for scanning or searching produc
 ## To Learn more
 
 Got to https://greenlifeapp.netlify.app/ and sign up
+
 
