@@ -1,4 +1,8 @@
-﻿# Green Life
+
+ <img width="312" height="767" alt="Green Life" src="https://github.com/user-attachments/assets/57f7be8f-b4ff-41c1-a560-79dfe75225d6" />
+ 
+ # Green Life
+
 
 Green Life is a React Native mobile app concept for scanning or searching products and returning source-backed environmental impact data.
 
@@ -18,3 +22,10 @@ Green Life is a React Native mobile app concept for scanning or searching produc
 2. Start the app with `npm start`
 3. Replace mock content with live API integration
 4. Build the matching Figma file using `docs/figma-component-checklist.md`
+
+## To Learn more
+
+Got to https://greenlifeapp.netlify.app/ and sign up
+
+
+
