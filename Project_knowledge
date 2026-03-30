@@ -1,0 +1,251 @@
+# GREEN LIFE — PROJECT CONTEXT
+Last updated: March 27, 2026
+
+## WHAT IT IS
+Green Life is a mobile app and movement. Point your phone at the world — we tell you the environmental impact of what you're looking at, honestly and without overstating precision. Built on Expo / React Native. Live on Lee's phone via Expo Go.
+
+Tagline: "Be present. Have knowledge. Pay attention."
+Founder: Lee Williams, Edelleye Digital, Tulsa OK
+
+## KEY LINKS
+| Resource | URL |
+|---|---|
+| App site (live) | https://greenlifeapp.netlify.app/ |
+| Status / overview deck | https://gamma.app/docs/GREEN-LIFE-r6wiyvzvdkqruda |
+| Design system (live) | https://v0-design-system-eta-jade.vercel.app/ |
+| Design system repo | https://github.com/leemwilliams-eng/greenlife-design-system |
+| App repo | https://github.com/leemwilliams-eng/Green-Life |
+| ClickUp App Dev Status | https://app.clickup.com/t/86e0ew7rz |
+| ClickUp API Integration | https://app.clickup.com/t/86e0ha1yb |
+| ClickUp Funding Strategy | https://app.clickup.com/t/86e0c61vt |
+| ClickUp Opportunities list | ID: 901711900982 |
+
+## TECH STACK
+- Expo SDK ~52
+- React Native 0.76.5
+- TypeScript
+- @react-navigation/native + native-stack + bottom-tabs
+- @expo/vector-icons (Ionicons)
+- expo-font
+- expo-camera
+- react-native-safe-area-context
+- Plus Jakarta Sans (Light, Regular, Medium, SemiBold)
+- Platform: Windows / PowerShell
+
+## PROJECT FOLDER
+C:\Users\leew\OneDrive\Documents\Playground\green-life\green-life\
+(double-nested — the outer and inner folders are both named green-life)
+
+## FOLDER STRUCTURE
+green-life\
+├── App.tsx
+├── app.json
+├── CLAUDE.md
+├── Project_knowledge
+├── package.json
+├── tsconfig.json
+├── assets\
+│   └── fonts\
+│       ├── PlusJakartaSans-Light.ttf
+│       ├── PlusJakartaSans-Regular.ttf
+│       ├── PlusJakartaSans-Medium.ttf
+│       └── PlusJakartaSans-SemiBold.ttf
+├── navigation\
+│   └── AppNavigator.tsx
+└── screens\
+    ├── SplashScreen.tsx      ✅ Complete
+    ├── LoginScreen.tsx       ✅ Complete
+    ├── HomeScreen.tsx        ✅ Complete
+    ├── SearchScreen.tsx      ✅ Complete
+    ├── ScanScreen.tsx        ✅ Complete
+    ├── ResultScreen.tsx      ✅ Complete
+    ├── CommunityScreen.tsx   ✅ Complete
+    └── ProfileScreen.tsx     ✅ Complete
+
+## SCREENS STATUS — ALL BUILT
+| Screen    | Status | Notes |
+|-----------|--------|-------|
+| Splash    | ✅     | Animated reveal, tap-to-continue (no auto-advance) |
+| Login     | ✅     | Placeholder auth, routes to MainTabs |
+| Home      | ✅     | Running on device, Scan Now wired to Scan tab |
+| Search    | ✅     | Running on device |
+| Scan      | ✅     | Food / Material / Barcode modes, photo preview/confirm |
+| Result    | ✅     | Food, material, and product result shapes |
+| Community | ✅     | Impact banner, Igniters leaderboard, Sparks feed |
+| Profile   | ✅     | Stats, settings, Igniter badge |
+
+## NAVIGATION STRUCTURE
+Stack (AppNavigator.tsx):
+  Splash → Login → MainTabs → Result (slides up from bottom, animation: slide_from_bottom)
+
+MainTabs (bottom tab navigator):
+  Home | Search | Scan | Community | Profile
+
+AppNavigator wraps everything in:
+  <SafeAreaProvider> → <NavigationContainer theme={DarkTheme}> → <Stack.Navigator>
+
+## SCAN SCREEN — 3 MODES
+- Food (primary):     live camera → shutter → photo preview → confirm → ResultScreen (mode: food)
+- Material (primary): same flow → ResultScreen (mode: material)
+- Barcode (secondary): live scan auto-fires → ResultScreen (mode: barcode)
+- All modes: manual text search fallback at bottom panel
+- Camera layout: cameraArea is flex:1 in normal flow, bottomPanel is below it (not overlapping)
+
+## RESULT SCREEN — DATA SHAPES
+Params received from ScanScreen:
+  { type: 'photo', mode: 'food'|'material', image: base64, uri: string }
+  { type: 'barcode', query: string, mode: 'barcode' }
+  { type: 'search', query: string, mode: 'food'|'material'|'barcode' }
+
+Food result shape (matches FoodLookupData from restaurant API spec):
+  food.matched_name, food.kg_co2e_per_serving, food.impact_tier, food.confidence,
+  food.serving_size_g, food.food_category, food.source_citation
+  equivalents[]: { label, value, unit, icon } — miles driven, phone charges, tree days, streaming hours
+  meta.sparks: { awarded, newTotal, isFirstScan, reason }
+
+Material result shape (matches MaterialLookupData):
+  material.matched_name, material.sustainability_rating, material.recyclable,
+  material.compostable, material.decomposition_label, material.disposal_guidance,
+  material.better_alternative, material.kg_co2e_per_unit
+
+## COMMUNITY SCREEN — 3 SECTIONS
+1. Impact banner — "The fire is spreading." — aggregate stats grid (Igniters, scans, CO₂e surfaced, materials)
+2. Top Igniters leaderboard — ranked by Sparks, gold medals top 3, "You" pill on current user's row
+3. Recent Sparks feed — filterable by All / Food / Material / Product, shows who scanned what and where
+4. Manifesto footer — founder quote in italic, gold divider, gold attribution
+
+## SPLASH SCREEN BEHAVIOR
+- Animates in sequence: logo rises → mottos fade → quote fades → "Tap to continue" pulses
+- NEVER auto-advances — waits for user touch anywhere on screen
+- On tap: fades out → navigates to Login
+- TouchableWithoutFeedback wraps the entire screen
+- Natural entry point for future guest/freemium model
+
+## BRAND TOKENS
+- Background:   #0E1A0F
+- Card:         #121E13
+- Elevated:     #1A2E1C
+- Green:        #2F6B3B
+- Green Light:  #4A9B5F
+- Green Muted:  #4A6E4D
+- Gold:         #C8A96E
+- Gold Dim:     #7A5E30
+- Gold BG:      #2E1F0A
+- Text Primary: #F5F3EF
+- Nav BG:       #0A140B
+
+## WORDMARK SPEC — CRITICAL ⚠️
+The "GREEN LIFE" wordmark must always render as:
+- "GREEN" in white (#F5F3EF), "LIFE" in green (#4A9B5F)
+- letterSpacing: 4-6 between the two words via a spacer Text node
+- Font: PlusJakartaSans-SemiBold
+
+JSX pattern (HomeScreen header):
+  <Text style={styles.wordmark}>
+    Green
+    <Text style={styles.wordmarkSpacer}>{" "}</Text>
+    <Text style={styles.wordmarkAccent}>Life</Text>
+  </Text>
+
+Styles required:
+  wordmark:       { fontFamily: 'PlusJakartaSans-SemiBold', fontSize: 22, color: colors.textPrimary, letterSpacing: 0 }
+  wordmarkSpacer: { letterSpacing: 4 }
+  wordmarkAccent: { color: colors.greenLight }
+
+⚠️ THIS FIX REVERTS every time HomeScreen.tsx is freshly copied from uploads.
+   Always grep for "wordmark" and verify before delivering.
+
+Splash/Login wordmark JSX (slightly different — SemiBold, all caps):
+  <Text style={styles.logo}>
+    <Text style={styles.logoWhite}>GREEN</Text>
+    <Text style={styles.logoSpacer}> </Text>
+    <Text style={styles.logoGreen}>LIFE</Text>
+  </Text>
+
+Mottos on Splash and Login: ALL THREE must appear in white (#F5F3EF), never green:
+  "Be present." / "Have knowledge." / "Pay attention."
+
+## CONFIDENCE BADGE SYSTEM
+- Exact Match:  bg #1A3D1F  text #4A9B5F  border #2A5030
+- Probable:     bg #1A2A3D  text #5B8FCC  border #223650
+- Estimate:     bg #2E2410  text #C8A96E  border #3D3015
+
+## SUSTAINABILITY BADGE SYSTEM (material scans)
+- Critical:     bg #3D1A1A  text #E05C5C  border #5C2020
+- Moderate:     bg #2E2410  text #C8A96E  border #3D3015
+- Good:         bg #1A3D1F  text #4A9B5F  border #2A5030
+
+## IMPACT TIER COLORS (food carbon)
+- High:   #E05C5C (red)
+- Medium: #C8A96E (gold)
+- Low:    #4A9B5F (green)
+
+## SPARKS — GAMIFICATION
+Currency earned per scan, persisted server-side:
+- Food photo scan (successful): 1 Spark
+- Menu text lookup: 1 Spark
+- Material scan: 1 Spark
+- Table scan (N items): N Sparks
+- First scan ever: +2 bonus
+
+Community members are called Igniters — founding members who were here before the fire started.
+
+## RESTAURANT API INTEGRATION — BUILT, NOT YET WIRED
+Full backend spec written and delivered. Key files:
+- visionService.ts — Google Vision API (food + material detection)
+- foodEmissionService.ts — Food carbon lookup, 60+ foods, Agribalyse data
+- materialImpactService.ts — 15 restaurant materials
+- sparksService.ts — Sparks award + retrieve
+- usdaService.ts — USDA FoodData Central enrichment (free)
+- climatiqService.ts — Carbon fallback (100 free/month)
+
+Database migrations (run in order):
+  001_add_sparks_table.sql
+  002_add_food_emission_factors.sql (requires pg_trgm extension)
+  003_add_material_impacts.sql
+
+API endpoints:
+  POST /api/v1/lookup/image  (mode: food | material | product)
+  GET  /api/v1/search         (mode: food | product)
+  GET  /api/v1/user/sparks
+
+Lookup chain (food):
+  Vision API → exact match → alias → fuzzy (pg_trgm) → category fallback → Climatiq → NO_DATA_FOUND
+
+## API KEYS NEEDED
+| API | Required? | Cost |
+|-----|-----------|------|
+| Google Vision | Yes (photo scan) | $1.50/1,000 images |
+| USDA FoodData Central | No | Free (DEMO_KEY works) |
+| Climatiq | No (fallback) | Free up to 100/mo |
+
+## NEXT STEPS — INTEGRATION PRIORITY ORDER
+1. Deploy backend API (Render or Railway)
+2. Wire authentication — Supabase Auth recommended
+3. Google Vision API key + DB migrations + seed data
+4. Wire Scan → Result (food + material photo flow)
+5. Wire Scan → Result (barcode + text search)
+6. Wire Profile (real stats + sign out)
+7. Wire Community (live leaderboard + feed)
+8. Guest login / freemium path (splash already sets this up)
+9. Design system CSS tokens + Figma MCP
+
+## KNOWN ISSUES FIXED
+- Double nav bar: screens had own nav + AppNavigator nav — removed from screens
+- Top cut off on Android: fixed with Platform.OS android + StatusBar.currentHeight
+- Unicode icons broken on device: replaced with Ionicons from @expo/vector-icons
+- PowerShell script encoding: corrupts files — always deliver individual .tsx files, never scripts
+- NavigationContainer missing: AppNavigator must wrap Stack in <NavigationContainer theme={DarkTheme}>
+- Tab bar overlapping device nav: fixed with useSafeAreaInsets() + SafeAreaProvider
+- HomeScreen wordmark revert: see WORDMARK SPEC section above
+- Camera view bleeding behind search panel: restructured to cameraArea flex:1, bottomPanel in normal flow
+- Shutter button too close to bottom panel: paddingBottom: 40 relative to cameraArea
+
+## HOW TO RUN
+npx expo start
+Scan QR with Expo Go
+
+## DELIVERY RULE
+Always deliver individual .tsx files for download and manual placement.
+Never use PowerShell scripts to write file content — encoding corrupts the code.
+Package changed files only into a zip — never the full project.

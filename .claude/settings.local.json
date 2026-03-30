@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__claude_ai_Figma__whoami",
+      "mcp__claude_ai_Figma__get_design_context",
+      "mcp__claude_ai_Figma__get_metadata",
+      "Bash(cd:*)",
+      "Bash(rm:*)",
+      "Bash(grep:*)",
+      "mcp__claude_ai_ClickUp__clickup_get_workspace_hierarchy",
+      "mcp__claude_ai_ClickUp__clickup_search",
+      "Skill(claude-api)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(code:*)",
+      "mcp__claude_ai_ClickUp__clickup_create_task",
+      "mcp__claude_ai_Vercel__list_teams",
+      "mcp__claude_ai_Vercel__list_projects",
+      "Bash(node /tmp/ua-project-scan.js \"C:/Users/leew/OneDrive/Documents/Playground/green-life\" \"/tmp/ua-scan-results.json\")",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(echo $TEMP)",
+      "Bash(echo $TMP)",
+      "Bash(node \"C:/Users/leew/OneDrive/Documents/Playground/green-life/.understand-anything/ua-project-scan.js\" \"C:/Users/leew/OneDrive/Documents/Playground/green-life\" \"C:/Users/leew/OneDrive/Documents/Playground/green-life/.understand-anything/intermediate/ua-scan-results.json\")",
+      "Bash(node /tmp/ua-project-scan.js)",
+      "Read(//c/tmp/**)",
+      "Bash(node -e \"console.log\\(require\\(''os''\\).tmpdir\\(\\)\\)\")",
+      "Bash(node \"C:\\\\Users\\\\leew\\\\AppData\\\\Local\\\\Temp\\\\ua-project-scan.js\" \"C:\\\\Users\\\\leew\\\\OneDrive\\\\Documents\\\\Playground\\\\green-life\" \"C:\\\\Users\\\\leew\\\\OneDrive\\\\Documents\\\\Playground\\\\green-life\\\\.understand-anything\\\\intermediate\\\\scan-result.json\")",
+      "Bash(echo \"Exit code: $?\")",
+      "Bash(node -e \":*)",
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(npx pnpm:*)",
+      "Read(//usr/local/bin/**)",
+      "Read(//c/Users/leew/.npm-global/bin/**)",
+      "Bash(GRAPH_DIR=\"C:/Users/leew/OneDrive/Documents/Playground/green-life\" npx vite --open)"
+    ]
+  }
+}

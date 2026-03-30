@@ -1,0 +1,4660 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "green-life",
+    "languages": [
+      "typescript",
+      "javascript",
+      "python"
+    ],
+    "frameworks": [
+      "React Native",
+      "Expo",
+      "Zustand",
+      "TanStack Query"
+    ],
+    "description": "Green Life is a React Native mobile app for scanning or searching products and returning source-backed environmental impact data. It is built with Expo and TypeScript and includes navigation, theme tokens, and starter screens aligned to a Figma spec.",
+    "analyzedAt": "2026-03-18T20:36:28.651Z",
+    "gitCommitHash": "HEAD"
+  },
+  "nodes": [
+    {
+      "id": "file:App.tsx",
+      "type": "file",
+      "name": "App.tsx",
+      "filePath": "App.tsx",
+      "summary": "Root React Native component that bootstraps the app with font loading, React Query, dark-themed navigation container, and splash screen management.",
+      "tags": [
+        "entry-point",
+        "component",
+        "config",
+        "react-native"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:babel.config.js",
+      "type": "file",
+      "name": "babel.config.js",
+      "filePath": "babel.config.js",
+      "summary": "Babel configuration that enables the Expo preset for React Native transpilation.",
+      "tags": [
+        "config",
+        "build-tool",
+        "babel"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:index.js",
+      "type": "file",
+      "name": "index.js",
+      "filePath": "index.js",
+      "summary": "Application entry point that registers the root App component with Expo's registerRootComponent.",
+      "tags": [
+        "entry-point",
+        "bootstrap",
+        "react-native"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:mock-api-server.js",
+      "type": "file",
+      "name": "mock-api-server.js",
+      "filePath": "mock-api-server.js",
+      "summary": "Standalone HTTP mock server that simulates the Green Life REST API (v1) with hardcoded product, source, history, saved-items, and search endpoints for UI development.",
+      "tags": [
+        "mock-server",
+        "api-handler",
+        "development-tool",
+        "http-server"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Plain Node.js http module with no framework dependencies; uses URL constructor for route parsing."
+    },
+    {
+      "id": "file:server/controllers/lookup.ts",
+      "type": "file",
+      "name": "lookup.ts",
+      "filePath": "server/controllers/lookup.ts",
+      "summary": "Express controller factory for POST /api/v1/lookup/image that routes image lookups through food (Vision -> DB -> USDA -> Climatiq) and material (Vision -> DB) pipelines, awarding Sparks on success.",
+      "tags": [
+        "api-handler",
+        "controller",
+        "factory",
+        "restaurant-feature"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Uses factory pattern returning a closure that captures injected service instances."
+    },
+    {
+      "id": "file:server/controllers/search.ts",
+      "type": "file",
+      "name": "search.ts",
+      "filePath": "server/controllers/search.ts",
+      "summary": "Express controller factory for GET /api/v1/search that extends product search with a 'food' mode, looking up carbon impact data from the food emission table with optional USDA enrichment and Sparks rewards.",
+      "tags": [
+        "api-handler",
+        "controller",
+        "factory",
+        "restaurant-feature"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:server/db/seeds/food_emission_factors.ts",
+      "type": "file",
+      "name": "food_emission_factors.ts",
+      "filePath": "server/db/seeds/food_emission_factors.ts",
+      "summary": "Database seed file containing a comprehensive array of farm-to-fork CO2e emission factors per kg for ~50 food categories (beef, poultry, seafood, vegetables, etc.) sourced from Agribalyse, IPCC, and Poore & Nemecek, plus a seeder function.",
+      "tags": [
+        "data-model",
+        "seed-data",
+        "sustainability",
+        "database"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Primarily a large typed constant array with an async seed function at the end."
+    },
+    {
+      "id": "file:server/db/seeds/material_impacts.ts",
+      "type": "file",
+      "name": "material_impacts.ts",
+      "filePath": "server/db/seeds/material_impacts.ts",
+      "summary": "Database seed file with lifecycle impact data for disposable restaurant materials (straws, cups, lids, utensils, containers) including CO2e per unit, recyclability, decomposition time, and better alternatives.",
+      "tags": [
+        "data-model",
+        "seed-data",
+        "sustainability",
+        "database"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:server/services/restaurant/climatiqService.ts",
+      "type": "file",
+      "name": "climatiqService.ts",
+      "filePath": "server/services/restaurant/climatiqService.ts",
+      "summary": "Last-resort carbon estimation service that calls the Climatiq API with EXIOBASE IO tables when a food item cannot be matched in the local emission factor table or USDA, returning category-level low-confidence estimates.",
+      "tags": [
+        "service",
+        "api-client",
+        "sustainability",
+        "fallback"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:server/controllers/lookup.ts:createLookupController",
+      "type": "function",
+      "name": "createLookupController",
+      "filePath": "server/controllers/lookup.ts",
+      "lineRange": [
+        46,
+        247
+      ],
+      "summary": "Factory function that instantiates all restaurant lookup services (food, material, sparks, vision, USDA, Climatiq) and returns an Express handler supporting product, food, and material image lookup modes.",
+      "tags": [
+        "factory",
+        "controller",
+        "api-handler",
+        "dependency-injection"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "func:server/controllers/search.ts:createSearchController",
+      "type": "function",
+      "name": "createSearchController",
+      "filePath": "server/controllers/search.ts",
+      "lineRange": [
+        31,
+        124
+      ],
+      "summary": "Factory function that creates an Express search handler supporting product pass-through and food carbon impact search with USDA enrichment and Sparks rewards.",
+      "tags": [
+        "factory",
+        "controller",
+        "api-handler"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:mock-api-server.js:send",
+      "type": "function",
+      "name": "send",
+      "filePath": "mock-api-server.js",
+      "lineRange": [
+        160,
+        168
+      ],
+      "summary": "Helper that writes a JSON response with CORS headers in the standard {data, meta, error} envelope format.",
+      "tags": [
+        "utility",
+        "http-response",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:server/services/restaurant/climatiqService.ts:ClimatiqService",
+      "type": "class",
+      "name": "ClimatiqService",
+      "filePath": "server/services/restaurant/climatiqService.ts",
+      "lineRange": [
+        37,
+        120
+      ],
+      "summary": "Service class that estimates food carbon footprint via Climatiq's EXIOBASE emission factors, mapping food names to broad categories and converting per-dollar estimates to per-serving values.",
+      "tags": [
+        "service",
+        "api-client",
+        "carbon-estimation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:server/db/seeds/food_emission_factors.ts:seedFoodEmissionFactors",
+      "type": "function",
+      "name": "seedFoodEmissionFactors",
+      "filePath": "server/db/seeds/food_emission_factors.ts",
+      "lineRange": [
+        500,
+        527
+      ],
+      "summary": "Async function that inserts the FOOD_EMISSION_FACTORS array into the PostgreSQL food_emission_factors table using upsert (ON CONFLICT DO NOTHING).",
+      "tags": [
+        "database",
+        "seed",
+        "async"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:server/db/seeds/material_impacts.ts:seedMaterialImpacts",
+      "type": "function",
+      "name": "seedMaterialImpacts",
+      "filePath": "server/db/seeds/material_impacts.ts",
+      "lineRange": [
+        251,
+        285
+      ],
+      "summary": "Async function that inserts the MATERIAL_IMPACTS array into the PostgreSQL material_impacts table using upsert (ON CONFLICT DO NOTHING).",
+      "tags": [
+        "database",
+        "seed",
+        "async"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:server/services/restaurant/foodEmissionService.ts",
+      "type": "file",
+      "name": "foodEmissionService.ts",
+      "filePath": "server/services/restaurant/foodEmissionService.ts",
+      "summary": "Provides a multi-strategy food carbon emission lookup service that queries a PostgreSQL food_emission_factors table using exact match, alias containment, pg_trgm fuzzy matching, and category-level fallback to return kg CO2e impact data per food item.",
+      "tags": [
+        "service",
+        "data-model",
+        "sustainability",
+        "database-query",
+        "food-emissions"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:server/services/restaurant/foodEmissionService.ts:FoodEmissionService",
+      "type": "class",
+      "name": "FoodEmissionService",
+      "filePath": "server/services/restaurant/foodEmissionService.ts",
+      "lineRange": [
+        63,
+        240
+      ],
+      "summary": "Database-backed service that resolves food names to carbon emission impact data using a four-stage lookup chain (exact, alias, fuzzy trigram, category fallback) against a PostgreSQL food_emission_factors table.",
+      "tags": [
+        "service",
+        "database-query",
+        "food-emissions",
+        "lookup-chain"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:server/services/restaurant/materialImpactService.ts",
+      "type": "file",
+      "name": "materialImpactService.ts",
+      "filePath": "server/services/restaurant/materialImpactService.ts",
+      "summary": "Provides a multi-strategy restaurant material sustainability lookup service that queries a PostgreSQL material_impacts table to return recyclability, compostability, disposal guidance, and CO2e data for items like straws, cups, and containers.",
+      "tags": [
+        "service",
+        "sustainability",
+        "database-query",
+        "material-impact"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:server/services/restaurant/materialImpactService.ts:MaterialImpactService",
+      "type": "class",
+      "name": "MaterialImpactService",
+      "filePath": "server/services/restaurant/materialImpactService.ts",
+      "lineRange": [
+        36,
+        155
+      ],
+      "summary": "Database-backed service that resolves material descriptions (e.g. 'plastic straw') to sustainability impact data using exact, alias, fuzzy, and item-type fallback matching against a material_impacts table.",
+      "tags": [
+        "service",
+        "database-query",
+        "material-impact",
+        "lookup-chain"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:server/services/restaurant/sparksService.ts",
+      "type": "file",
+      "name": "sparksService.ts",
+      "filePath": "server/services/restaurant/sparksService.ts",
+      "summary": "Implements the Sparks gamification system that awards points to users for photo scans, menu lookups, and table scans, including a first-scan bonus, with transactional PostgreSQL persistence and summary/history retrieval.",
+      "tags": [
+        "service",
+        "gamification",
+        "database-query",
+        "user-engagement"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:server/services/restaurant/sparksService.ts:SparksService",
+      "type": "class",
+      "name": "SparksService",
+      "filePath": "server/services/restaurant/sparksService.ts",
+      "lineRange": [
+        53,
+        186
+      ],
+      "summary": "Transactional service that awards and tracks 'Sparks' gamification points per user, with first-scan bonus logic, running totals, and paginated history retrieval from PostgreSQL.",
+      "tags": [
+        "service",
+        "gamification",
+        "transaction",
+        "database-query"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:server/services/restaurant/usdaService.ts",
+      "type": "file",
+      "name": "usdaService.ts",
+      "filePath": "server/services/restaurant/usdaService.ts",
+      "summary": "Optional enrichment service that fetches nutritional data (calories, protein) from the USDA FoodData Central API to augment food emission results with real nutrition context.",
+      "tags": [
+        "service",
+        "external-api",
+        "nutrition",
+        "enrichment"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:server/services/restaurant/usdaService.ts:UsdaService",
+      "type": "class",
+      "name": "UsdaService",
+      "filePath": "server/services/restaurant/usdaService.ts",
+      "lineRange": [
+        27,
+        65
+      ],
+      "summary": "Calls the USDA FoodData Central search API to enrich a food name with calorie and protein data, returning null gracefully if the API is unavailable.",
+      "tags": [
+        "service",
+        "external-api",
+        "nutrition",
+        "http-client"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:server/services/restaurant/visionService.ts",
+      "type": "file",
+      "name": "visionService.ts",
+      "filePath": "server/services/restaurant/visionService.ts",
+      "summary": "Wraps the Google Cloud Vision API to identify food items and disposable restaurant materials in photos, filtering raw labels through curated keyword lists to produce domain-relevant results.",
+      "tags": [
+        "service",
+        "external-api",
+        "computer-vision",
+        "image-recognition"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:server/services/restaurant/visionService.ts:VisionService",
+      "type": "class",
+      "name": "VisionService",
+      "filePath": "server/services/restaurant/visionService.ts",
+      "lineRange": [
+        43,
+        144
+      ],
+      "summary": "Calls Google Cloud Vision API with LABEL_DETECTION and WEB/OBJECT_LOCALIZATION features, then filters results through food and material keyword lists to classify photographed restaurant items.",
+      "tags": [
+        "service",
+        "external-api",
+        "computer-vision",
+        "classification"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:server/types/restaurant.ts",
+      "type": "file",
+      "name": "restaurant.ts",
+      "filePath": "server/types/restaurant.ts",
+      "summary": "Defines shared TypeScript request/response types for the restaurant API layer (image lookup, search, food/material response envelopes) and exports a buildCarbonEquivalents utility that converts kg CO2e into human-relatable comparisons.",
+      "tags": [
+        "type-definition",
+        "api-handler",
+        "utility",
+        "data-model"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Imports types from sibling service files, creating a cross-reference between server types and service layer. The buildCarbonEquivalents function is the only runtime export."
+    },
+    {
+      "id": "func:server/types/restaurant.ts:buildCarbonEquivalents",
+      "type": "function",
+      "name": "buildCarbonEquivalents",
+      "filePath": "server/types/restaurant.ts",
+      "lineRange": [
+        78,
+        124
+      ],
+      "summary": "Converts a kg CO2e value into an array of human-relatable equivalents (miles driven, phone charges, tree absorption days, streaming hours) using EPA conversion factors.",
+      "tags": [
+        "utility",
+        "carbon-footprint",
+        "formatting",
+        "conversion"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/api/claude.ts",
+      "type": "file",
+      "name": "claude.ts",
+      "filePath": "src/api/claude.ts",
+      "summary": "Client-side wrapper that sends user messages to the Anthropic Claude API (Haiku model) with sustainability-focused system instructions and item context for the voice chat feature.",
+      "tags": [
+        "api-handler",
+        "external-api",
+        "ai-integration",
+        "http-client"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/api/claude.ts:askClaude",
+      "type": "function",
+      "name": "askClaude",
+      "filePath": "src/api/claude.ts",
+      "lineRange": [
+        1,
+        22
+      ],
+      "summary": "Sends a user message with scanned item context to the Claude Haiku API and returns the text response, used for the voice-based sustainability assistant feature.",
+      "tags": [
+        "api-handler",
+        "ai-integration",
+        "http-client"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/api/client.ts",
+      "type": "file",
+      "name": "client.ts",
+      "filePath": "src/api/client.ts",
+      "summary": "Central API fetch wrapper that routes requests through either a mock data layer or the real Green Life API based on an environment variable, providing typed JSON response handling and error propagation.",
+      "tags": [
+        "api-handler",
+        "http-client",
+        "utility",
+        "config"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/api/client.ts:apiFetch",
+      "type": "function",
+      "name": "apiFetch",
+      "filePath": "src/api/client.ts",
+      "lineRange": [
+        6,
+        26
+      ],
+      "summary": "Generic typed fetch wrapper that delegates to mockFetch when USE_MOCK_API is enabled, otherwise calls the real API base URL with JSON content headers and error handling.",
+      "tags": [
+        "http-client",
+        "utility",
+        "mock-support"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/api/items.ts",
+      "type": "file",
+      "name": "items.ts",
+      "filePath": "src/api/items.ts",
+      "summary": "Thin API module that exposes a single getItemDetail function for fetching full item details by ID through the shared apiFetch client.",
+      "tags": [
+        "api-handler",
+        "http-client",
+        "data-access"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/api/items.ts:getItemDetail",
+      "type": "function",
+      "name": "getItemDetail",
+      "filePath": "src/api/items.ts",
+      "lineRange": [
+        5,
+        7
+      ],
+      "summary": "Fetches a single item's full detail by ID from the /items/:id endpoint, returning a typed ApiEnvelope containing the ItemDetail.",
+      "tags": [
+        "api-handler",
+        "data-access",
+        "http-client"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/api/lookup.ts",
+      "type": "file",
+      "name": "lookup.ts",
+      "filePath": "src/api/lookup.ts",
+      "summary": "Provides API functions for product lookup by barcode, text search, and image recognition, all delegating to the shared apiFetch client.",
+      "tags": [
+        "api-client",
+        "lookup",
+        "service",
+        "data-fetching"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/api/lookup.ts:lookupBarcode",
+      "type": "function",
+      "name": "lookupBarcode",
+      "filePath": "src/api/lookup.ts",
+      "lineRange": [
+        5,
+        10
+      ],
+      "summary": "Posts a barcode string to the server and returns a matched ProductSummary.",
+      "tags": [
+        "api-call",
+        "barcode",
+        "lookup"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/api/lookup.ts:search",
+      "type": "function",
+      "name": "search",
+      "filePath": "src/api/lookup.ts",
+      "lineRange": [
+        12,
+        18
+      ],
+      "summary": "Searches products by query string with optional type filter via GET request.",
+      "tags": [
+        "api-call",
+        "search",
+        "lookup"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/api/lookup.ts:lookupImage",
+      "type": "function",
+      "name": "lookupImage",
+      "filePath": "src/api/lookup.ts",
+      "lineRange": [
+        20,
+        25
+      ],
+      "summary": "Posts an image URL to the server for visual product recognition, returning candidate matches.",
+      "tags": [
+        "api-call",
+        "image",
+        "lookup"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/api/mockData.ts",
+      "type": "file",
+      "name": "mockData.ts",
+      "filePath": "src/api/mockData.ts",
+      "summary": "Provides a complete mock API layer with hardcoded product, source, history, and user data. The mockFetch function simulates all server endpoints for offline development.",
+      "tags": [
+        "mock-data",
+        "testing",
+        "api-client",
+        "development-utility"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "func:src/api/mockData.ts:mockFetch",
+      "type": "function",
+      "name": "mockFetch",
+      "filePath": "src/api/mockData.ts",
+      "lineRange": [
+        193,
+        253
+      ],
+      "summary": "Simulates the server API by routing requests based on URL pathname and HTTP method, returning mock data wrapped in the standard ApiEnvelope format.",
+      "tags": [
+        "mock",
+        "api-simulation",
+        "routing",
+        "development-utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/api/restaurantLookup.ts",
+      "type": "file",
+      "name": "restaurantLookup.ts",
+      "filePath": "src/api/restaurantLookup.ts",
+      "summary": "Restaurant-specific API functions for scanning food photos, materials, searching menu items by text, and fetching Sparks reward summaries.",
+      "tags": [
+        "api-client",
+        "restaurant",
+        "service",
+        "data-fetching"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/api/restaurantLookup.ts:scanFoodPhoto",
+      "type": "function",
+      "name": "scanFoodPhoto",
+      "filePath": "src/api/restaurantLookup.ts",
+      "lineRange": [
+        20,
+        29
+      ],
+      "summary": "Posts a base64-encoded food photo to the lookup endpoint to get carbon impact data and Sparks rewards.",
+      "tags": [
+        "api-call",
+        "food-scan",
+        "restaurant"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/api/restaurantLookup.ts:scanMaterial",
+      "type": "function",
+      "name": "scanMaterial",
+      "filePath": "src/api/restaurantLookup.ts",
+      "lineRange": [
+        36,
+        41
+      ],
+      "summary": "Posts a base64-encoded photo of restaurant material (straw, container) for sustainability analysis.",
+      "tags": [
+        "api-call",
+        "material-scan",
+        "restaurant"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/api/restaurantLookup.ts:searchMenuItem",
+      "type": "function",
+      "name": "searchMenuItem",
+      "filePath": "src/api/restaurantLookup.ts",
+      "lineRange": [
+        49,
+        52
+      ],
+      "summary": "Searches for a menu item by text query to retrieve carbon impact and Sparks data.",
+      "tags": [
+        "api-call",
+        "search",
+        "restaurant"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/api/restaurantLookup.ts:fetchSparksSummary",
+      "type": "function",
+      "name": "fetchSparksSummary",
+      "filePath": "src/api/restaurantLookup.ts",
+      "lineRange": [
+        56,
+        58
+      ],
+      "summary": "Fetches the current user's Sparks gamification summary from the server.",
+      "tags": [
+        "api-call",
+        "gamification",
+        "restaurant"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/api/sources.ts",
+      "type": "file",
+      "name": "sources.ts",
+      "filePath": "src/api/sources.ts",
+      "summary": "Single API function to fetch detailed information about a data source by ID, including methodology notes and ingestion timestamp.",
+      "tags": [
+        "api-client",
+        "service",
+        "data-fetching",
+        "sources"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/api/user.ts",
+      "type": "file",
+      "name": "user.ts",
+      "filePath": "src/api/user.ts",
+      "summary": "User-facing API functions for profile retrieval, scan history, and managing saved items (list, add, remove).",
+      "tags": [
+        "api-client",
+        "user",
+        "service",
+        "data-fetching"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/api/whisper.ts",
+      "type": "file",
+      "name": "whisper.ts",
+      "filePath": "src/api/whisper.ts",
+      "summary": "Sends audio files to OpenAI's Whisper API for speech-to-text transcription, using the EXPO_PUBLIC_OPENAI_API_KEY environment variable for authentication.",
+      "tags": [
+        "api-client",
+        "speech-to-text",
+        "openai",
+        "external-service"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/api/whisper.ts:transcribeAudio",
+      "type": "function",
+      "name": "transcribeAudio",
+      "filePath": "src/api/whisper.ts",
+      "lineRange": [
+        1,
+        14
+      ],
+      "summary": "Uploads an audio file URI to OpenAI Whisper API via FormData and returns the transcribed text.",
+      "tags": [
+        "api-call",
+        "transcription",
+        "openai"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/item/ConfidenceBadge.tsx",
+      "type": "file",
+      "name": "ConfidenceBadge.tsx",
+      "filePath": "src/components/item/ConfidenceBadge.tsx",
+      "summary": "React Native component that renders a color-coded pill badge indicating confidence level (high/medium/low) based on a numeric score threshold.",
+      "tags": [
+        "component",
+        "ui",
+        "badge",
+        "react-native"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/item/MatchBadge.tsx",
+      "type": "file",
+      "name": "MatchBadge.tsx",
+      "filePath": "src/components/item/MatchBadge.tsx",
+      "summary": "React Native component that renders a color-coded badge for each match type (exact, probable, estimate, material) to communicate data confidence transparency to users.",
+      "tags": [
+        "component",
+        "ui",
+        "badge",
+        "react-native"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/item/ResultCard.tsx",
+      "type": "file",
+      "name": "ResultCard.tsx",
+      "filePath": "src/components/item/ResultCard.tsx",
+      "summary": "Pressable card component displaying a product summary with name, brand, and match type badge. Used in search results and candidate lists.",
+      "tags": [
+        "component",
+        "ui",
+        "card",
+        "react-native"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/metrics/MetricRow.tsx",
+      "type": "file",
+      "name": "MetricRow.tsx",
+      "filePath": "src/components/metrics/MetricRow.tsx",
+      "summary": "Renders a single impact metric as a labeled row with value and unit, optionally pressable for navigation to metric details.",
+      "tags": [
+        "component",
+        "ui-element",
+        "metrics",
+        "react-native"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/components/metrics/MetricRow.tsx:MetricRow",
+      "type": "function",
+      "name": "MetricRow",
+      "filePath": "src/components/metrics/MetricRow.tsx",
+      "lineRange": [
+        11,
+        33
+      ],
+      "summary": "React Native component that displays an ImpactMetric label, estimate type, and value in a row layout, wrapping in a Pressable when an onPress handler is provided.",
+      "tags": [
+        "component",
+        "ui-element",
+        "metrics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/restaurant/FoodImpactCard.tsx",
+      "type": "file",
+      "name": "FoodImpactCard.tsx",
+      "filePath": "src/components/restaurant/FoodImpactCard.tsx",
+      "summary": "Displays a food item's carbon footprint with impact tier badge, CO2e per serving metric, carbon equivalents grid, and detailed environmental data rows (land use, water use, calories).",
+      "tags": [
+        "component",
+        "restaurant",
+        "carbon-footprint",
+        "data-display",
+        "react-native"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/components/restaurant/FoodImpactCard.tsx:FoodImpactCard",
+      "type": "function",
+      "name": "FoodImpactCard",
+      "filePath": "src/components/restaurant/FoodImpactCard.tsx",
+      "lineRange": [
+        16,
+        100
+      ],
+      "summary": "Main card component rendering a scrollable view of a food item's environmental impact including tier badge, primary CO2e metric, carbon equivalents, and optional detail rows for land/water use and calories.",
+      "tags": [
+        "component",
+        "restaurant",
+        "carbon-footprint",
+        "data-display"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/components/restaurant/MaterialImpactCard.tsx",
+      "type": "file",
+      "name": "MaterialImpactCard.tsx",
+      "filePath": "src/components/restaurant/MaterialImpactCard.tsx",
+      "summary": "Displays a restaurant material's sustainability profile including decomposition time, CO2e per item, recyclability/compostability status chips, and disposal guidance with better alternatives.",
+      "tags": [
+        "component",
+        "restaurant",
+        "sustainability",
+        "data-display",
+        "react-native"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/components/restaurant/MaterialImpactCard.tsx:MaterialImpactCard",
+      "type": "function",
+      "name": "MaterialImpactCard",
+      "filePath": "src/components/restaurant/MaterialImpactCard.tsx",
+      "lineRange": [
+        14,
+        78
+      ],
+      "summary": "Renders a scrollable card showing material sustainability rating, decomposition time, carbon footprint per item, recyclable/compostable chips, and disposal/alternative guidance blocks.",
+      "tags": [
+        "component",
+        "restaurant",
+        "sustainability",
+        "data-display"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/components/restaurant/SparksBadge.tsx",
+      "type": "file",
+      "name": "SparksBadge.tsx",
+      "filePath": "src/components/restaurant/SparksBadge.tsx",
+      "summary": "Provides two gamification components: SparksBadge shows the user's running Sparks total from Zustand state, and SparksToast renders an animated slide-in toast that awards Sparks after a successful scan with auto-dismiss.",
+      "tags": [
+        "component",
+        "gamification",
+        "animation",
+        "react-native",
+        "hooks"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/components/restaurant/SparksBadge.tsx:SparksBadge",
+      "type": "function",
+      "name": "SparksBadge",
+      "filePath": "src/components/restaurant/SparksBadge.tsx",
+      "lineRange": [
+        18,
+        29
+      ],
+      "summary": "Compact badge component displaying the user's running Sparks total with a flame emoji, reading from Zustand store via useSparkTotal hook or an optional prop override.",
+      "tags": [
+        "component",
+        "gamification",
+        "badge"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/components/restaurant/SparksBadge.tsx:SparksToast",
+      "type": "function",
+      "name": "SparksToast",
+      "filePath": "src/components/restaurant/SparksBadge.tsx",
+      "lineRange": [
+        71,
+        109
+      ],
+      "summary": "Animated toast component that slides in from the top to show awarded Sparks after a scan, using spring and timing animations with a 2.5-second auto-dismiss timer.",
+      "tags": [
+        "component",
+        "animation",
+        "gamification",
+        "toast"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/components/ui/BrandFooter.tsx",
+      "type": "file",
+      "name": "BrandFooter.tsx",
+      "filePath": "src/components/ui/BrandFooter.tsx",
+      "summary": "Renders the Green Life brand footer with logo image, styled brand name using PlusJakartaSans-SemiBold, and italic tagline with emerald/white color accents.",
+      "tags": [
+        "component",
+        "branding",
+        "ui-element",
+        "react-native"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/ui/EmptyState.tsx",
+      "type": "file",
+      "name": "EmptyState.tsx",
+      "filePath": "src/components/ui/EmptyState.tsx",
+      "summary": "Simple empty state placeholder component displaying a centered title and message within a bordered surface card, used when no data is available.",
+      "tags": [
+        "component",
+        "ui-element",
+        "empty-state",
+        "react-native"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/ui/ErrorState.tsx",
+      "type": "file",
+      "name": "ErrorState.tsx",
+      "filePath": "src/components/ui/ErrorState.tsx",
+      "summary": "Displays an error message in a danger-bordered card with 'Something went wrong' title, used as a reusable error feedback component across screens.",
+      "tags": [
+        "component",
+        "ui-element",
+        "error-handling",
+        "react-native"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/ui/LoadingState.tsx",
+      "type": "file",
+      "name": "LoadingState.tsx",
+      "filePath": "src/components/ui/LoadingState.tsx",
+      "summary": "Minimal full-screen loading indicator using React Native's ActivityIndicator centered on screen with the app's primary color.",
+      "tags": [
+        "component",
+        "ui-element",
+        "loading",
+        "react-native"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/ui/PrimaryButton.tsx",
+      "type": "file",
+      "name": "PrimaryButton.tsx",
+      "filePath": "src/components/ui/PrimaryButton.tsx",
+      "summary": "Reusable primary action button supporting default/compact sizes and default/inverted color variants, using the app's design system tokens for styling.",
+      "tags": [
+        "component",
+        "ui-element",
+        "button",
+        "react-native"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/components/ui/PrimaryButton.tsx:PrimaryButton",
+      "type": "function",
+      "name": "PrimaryButton",
+      "filePath": "src/components/ui/PrimaryButton.tsx",
+      "lineRange": [
+        12,
+        23
+      ],
+      "summary": "Pressable button component with size (default/compact) and variant (default/inverted) style options, composing multiple conditional StyleSheet styles.",
+      "tags": [
+        "component",
+        "button",
+        "ui-element"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/ui/Screen.tsx",
+      "type": "file",
+      "name": "Screen.tsx",
+      "filePath": "src/components/ui/Screen.tsx",
+      "summary": "Provides a reusable Screen wrapper component that applies SafeAreaView insets and consistent background color and padding from the theme system.",
+      "tags": [
+        "component",
+        "utility",
+        "layout",
+        "ui-primitive"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/ui/SearchBar.tsx",
+      "type": "file",
+      "name": "SearchBar.tsx",
+      "filePath": "src/components/ui/SearchBar.tsx",
+      "summary": "Renders a pill-shaped search text input with themed styling, accepting controlled value and onChangeText props for product and brand search.",
+      "tags": [
+        "component",
+        "ui-primitive",
+        "search",
+        "form-input"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/ui/SecondaryButton.tsx",
+      "type": "file",
+      "name": "SecondaryButton.tsx",
+      "filePath": "src/components/ui/SecondaryButton.tsx",
+      "summary": "A secondary button component supporting three visual variants (default, accent, ghost) with optional full-width layout, used for non-primary actions throughout the app.",
+      "tags": [
+        "component",
+        "ui-primitive",
+        "button",
+        "interactive"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/ui/StatCard.tsx",
+      "type": "file",
+      "name": "StatCard.tsx",
+      "filePath": "src/components/ui/StatCard.tsx",
+      "summary": "Displays a labeled statistic value inside a shadowed card with optional tinted background, used for dashboard-style metric presentation on the home screen.",
+      "tags": [
+        "component",
+        "ui-primitive",
+        "data-display",
+        "metrics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/hooks/useRestaurantScan.ts",
+      "type": "file",
+      "name": "useRestaurantScan.ts",
+      "filePath": "src/hooks/useRestaurantScan.ts",
+      "summary": "Provides three TanStack React Query hooks for restaurant scanning: useFoodPhotoScan and useMaterialScan as mutations, and useMenuSearch as a query, all automatically syncing earned Sparks to the Zustand store on success.",
+      "tags": [
+        "hook",
+        "data-fetching",
+        "mutation",
+        "restaurant-scan",
+        "state-sync"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/hooks/useSparks.ts",
+      "type": "file",
+      "name": "useSparks.ts",
+      "filePath": "src/hooks/useSparks.ts",
+      "summary": "Manages the Sparks gamification state with a Zustand store for fast local badge count reads and a TanStack Query hook for server synchronization, hydrating the store on fetch.",
+      "tags": [
+        "hook",
+        "state-management",
+        "data-fetching",
+        "gamification",
+        "zustand"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/hooks/useVoiceChat.ts",
+      "type": "file",
+      "name": "useVoiceChat.ts",
+      "filePath": "src/hooks/useVoiceChat.ts",
+      "summary": "Implements a voice chat flow that records audio via expo-av, transcribes it via Whisper API, sends the transcript to Claude with user scan history context, and speaks the response aloud using expo-speech.",
+      "tags": [
+        "hook",
+        "voice",
+        "ai-integration",
+        "audio",
+        "state-machine"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/navigation/MainTabs.tsx",
+      "type": "file",
+      "name": "MainTabs.tsx",
+      "filePath": "src/navigation/MainTabs.tsx",
+      "summary": "Configures the bottom tab navigator with five tabs (Home, Search, Saved, Profile, Ask) using Feather icons and a transparent tab bar with themed active/inactive colors.",
+      "tags": [
+        "navigation",
+        "component",
+        "tab-navigator",
+        "layout"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/navigation/RootNavigator.tsx",
+      "type": "file",
+      "name": "RootNavigator.tsx",
+      "filePath": "src/navigation/RootNavigator.tsx",
+      "summary": "Defines the root native stack navigator with routes for onboarding, authentication, main tabs, barcode scanning, photo capture, and various detail screens.",
+      "tags": [
+        "navigation",
+        "component",
+        "stack-navigator",
+        "entry-point"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/hooks/useRestaurantScan.ts:useFoodPhotoScan",
+      "type": "function",
+      "name": "useFoodPhotoScan",
+      "filePath": "src/hooks/useRestaurantScan.ts",
+      "lineRange": [
+        35,
+        41
+      ],
+      "summary": "TanStack mutation hook that sends a food photo (base64) to the scan API and syncs the returned Sparks reward to local state.",
+      "tags": [
+        "hook",
+        "mutation",
+        "food-scan"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/hooks/useRestaurantScan.ts:useMaterialScan",
+      "type": "function",
+      "name": "useMaterialScan",
+      "filePath": "src/hooks/useRestaurantScan.ts",
+      "lineRange": [
+        51,
+        56
+      ],
+      "summary": "TanStack mutation hook that sends a material photo to the scan API and syncs earned Sparks to the Zustand store.",
+      "tags": [
+        "hook",
+        "mutation",
+        "material-scan"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/hooks/useRestaurantScan.ts:useMenuSearch",
+      "type": "function",
+      "name": "useMenuSearch",
+      "filePath": "src/hooks/useRestaurantScan.ts",
+      "lineRange": [
+        66,
+        78
+      ],
+      "summary": "TanStack query hook that searches menu items by name, only enabled when the query is at least 2 characters, with 5-minute stale time and 30-minute GC time.",
+      "tags": [
+        "hook",
+        "query",
+        "search"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/hooks/useSparks.ts:useSparksSummary",
+      "type": "function",
+      "name": "useSparksSummary",
+      "filePath": "src/hooks/useSparks.ts",
+      "lineRange": [
+        46,
+        61
+      ],
+      "summary": "TanStack query hook that fetches the full Sparks summary from the server and hydrates the Zustand store with the current total, refetching on window focus.",
+      "tags": [
+        "hook",
+        "query",
+        "server-sync"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/hooks/useVoiceChat.ts:useVoiceChat",
+      "type": "function",
+      "name": "useVoiceChat",
+      "filePath": "src/hooks/useVoiceChat.ts",
+      "lineRange": [
+        11,
+        89
+      ],
+      "summary": "Custom hook implementing a multi-phase voice chat state machine with recording, transcription, Claude AI response generation, and text-to-speech playback, plus a cancel method for cleanup.",
+      "tags": [
+        "hook",
+        "voice",
+        "state-machine",
+        "ai-integration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/navigation/MainTabs.tsx:MainTabs",
+      "type": "function",
+      "name": "MainTabs",
+      "filePath": "src/navigation/MainTabs.tsx",
+      "lineRange": [
+        14,
+        58
+      ],
+      "summary": "Renders a bottom tab navigator with five screens (Home, Search, Saved, Profile, Ask) each configured with a Feather icon.",
+      "tags": [
+        "component",
+        "navigation",
+        "tab-navigator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/navigation/RootNavigator.tsx:RootNavigator",
+      "type": "function",
+      "name": "RootNavigator",
+      "filePath": "src/navigation/RootNavigator.tsx",
+      "lineRange": [
+        18,
+        34
+      ],
+      "summary": "Renders the root stack navigator defining the app's complete screen hierarchy from onboarding through detail views.",
+      "tags": [
+        "component",
+        "navigation",
+        "stack-navigator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/navigation/types.ts",
+      "type": "file",
+      "name": "types.ts",
+      "filePath": "src/navigation/types.ts",
+      "summary": "Defines the RootStackParamList and MainTabParamList type aliases used for type-safe React Navigation throughout the app, specifying route names and their expected parameter shapes.",
+      "tags": [
+        "type-definition",
+        "navigation",
+        "config"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/screens/AuthScreen.tsx",
+      "type": "file",
+      "name": "AuthScreen.tsx",
+      "filePath": "src/screens/AuthScreen.tsx",
+      "summary": "Placeholder authentication screen that displays a 'Create your account' header and a 'Continue as Guest' button, serving as a stub for future auth wiring while keeping guest mode available for MVP.",
+      "tags": [
+        "screen",
+        "component",
+        "auth",
+        "placeholder"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/screens/BarcodeScannerScreen.tsx",
+      "type": "file",
+      "name": "BarcodeScannerScreen.tsx",
+      "filePath": "src/screens/BarcodeScannerScreen.tsx",
+      "summary": "Barcode scanner screen with a placeholder camera preview and manual barcode entry input. Uses react-query mutation to call lookupBarcode, navigating to ItemDetail on success or NoMatch on failure.",
+      "tags": [
+        "screen",
+        "component",
+        "barcode",
+        "api-handler"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/screens/CandidateResultsScreen.tsx",
+      "type": "file",
+      "name": "CandidateResultsScreen.tsx",
+      "filePath": "src/screens/CandidateResultsScreen.tsx",
+      "summary": "Displays a ranked FlatList of candidate product matches from an image-based lookup, allowing the user to select a match to navigate to ItemDetail or fall back to search.",
+      "tags": [
+        "screen",
+        "component",
+        "search-results",
+        "navigation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/screens/HomeScreen.tsx",
+      "type": "file",
+      "name": "HomeScreen.tsx",
+      "filePath": "src/screens/HomeScreen.tsx",
+      "summary": "Main home screen serving as the app's landing dashboard with a hero section, search bar, quick-scan and photo-capture action cards, horizontal stat cards, trust notice with confidence badge, and recent history loaded via react-query.",
+      "tags": [
+        "screen",
+        "component",
+        "entry-point",
+        "dashboard"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/screens/ItemDetailScreen.tsx",
+      "type": "file",
+      "name": "ItemDetailScreen.tsx",
+      "filePath": "src/screens/ItemDetailScreen.tsx",
+      "summary": "Product detail screen that fetches an item via react-query, displays its name, brand, match/confidence badges, impact metrics with navigation to MetricDetail, materials breakdown, disposal guidance, sources list, and a save-item mutation.",
+      "tags": [
+        "screen",
+        "component",
+        "detail-view",
+        "api-handler"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/screens/MetricDetailScreen.tsx",
+      "type": "file",
+      "name": "MetricDetailScreen.tsx",
+      "filePath": "src/screens/MetricDetailScreen.tsx",
+      "summary": "Displays detailed information for a single impact metric including value, scope, estimate type, methodology notes, and data source, fetched by querying the parent item and filtering to the requested metric type.",
+      "tags": [
+        "screen",
+        "component",
+        "detail-view",
+        "metrics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/screens/NoMatchScreen.tsx",
+      "type": "file",
+      "name": "NoMatchScreen.tsx",
+      "filePath": "src/screens/NoMatchScreen.tsx",
+      "summary": "Fallback screen shown when a barcode, image, or search lookup fails to find an exact match. Displays the lookup type and query value, and offers recovery paths to search, retry barcode, or retry photo.",
+      "tags": [
+        "screen",
+        "component",
+        "error-handling",
+        "navigation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/screens/OnboardingScreen.tsx",
+      "type": "file",
+      "name": "OnboardingScreen.tsx",
+      "filePath": "src/screens/OnboardingScreen.tsx",
+      "summary": "App onboarding/splash screen featuring a blurred hero image background, the Green Life logo and title, a tagline, a founder quote card, and a 'Let's Go' CTA button that navigates to MainTabs.",
+      "tags": [
+        "screen",
+        "component",
+        "onboarding",
+        "branding"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/screens/AuthScreen.tsx:AuthScreen",
+      "type": "function",
+      "name": "AuthScreen",
+      "filePath": "src/screens/AuthScreen.tsx",
+      "lineRange": [
+        7,
+        17
+      ],
+      "summary": "React component rendering a placeholder authentication screen with guest mode bypass.",
+      "tags": [
+        "component",
+        "screen",
+        "auth"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/screens/BarcodeScannerScreen.tsx:BarcodeScannerScreen",
+      "type": "function",
+      "name": "BarcodeScannerScreen",
+      "filePath": "src/screens/BarcodeScannerScreen.tsx",
+      "lineRange": [
+        19,
+        58
+      ],
+      "summary": "React screen component that manages barcode state and a lookup mutation, rendering a scanner preview, manual input field, and loading/error/empty states.",
+      "tags": [
+        "component",
+        "screen",
+        "barcode",
+        "mutation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/screens/CandidateResultsScreen.tsx:CandidateResultsScreen",
+      "type": "function",
+      "name": "CandidateResultsScreen",
+      "filePath": "src/screens/CandidateResultsScreen.tsx",
+      "lineRange": [
+        13,
+        35
+      ],
+      "summary": "React screen component rendering a FlatList of candidate product matches with header, result cards, and a search fallback footer.",
+      "tags": [
+        "component",
+        "screen",
+        "list-view"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/screens/HomeScreen.tsx:HomeScreen",
+      "type": "function",
+      "name": "HomeScreen",
+      "filePath": "src/screens/HomeScreen.tsx",
+      "lineRange": [
+        25,
+        87
+      ],
+      "summary": "Main home screen component with search bar, scan/photo action cards, stat cards, trust notice, and recent history query rendering with loading/error/empty states.",
+      "tags": [
+        "component",
+        "screen",
+        "dashboard",
+        "query"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "func:src/screens/ItemDetailScreen.tsx:ItemDetailScreen",
+      "type": "function",
+      "name": "ItemDetailScreen",
+      "filePath": "src/screens/ItemDetailScreen.tsx",
+      "lineRange": [
+        22,
+        120
+      ],
+      "summary": "Product detail screen component that fetches item data, renders hero card with badges, metric rows, materials, disposal guidance, sources, and provides a save-item mutation.",
+      "tags": [
+        "component",
+        "screen",
+        "detail-view",
+        "query"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "func:src/screens/MetricDetailScreen.tsx:MetricDetailScreen",
+      "type": "function",
+      "name": "MetricDetailScreen",
+      "filePath": "src/screens/MetricDetailScreen.tsx",
+      "lineRange": [
+        16,
+        80
+      ],
+      "summary": "Metric detail screen component that queries item data, finds the requested metric by type, and renders its value, scope, methodology, and source information.",
+      "tags": [
+        "component",
+        "screen",
+        "detail-view",
+        "query"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/screens/NoMatchScreen.tsx:NoMatchScreen",
+      "type": "function",
+      "name": "NoMatchScreen",
+      "filePath": "src/screens/NoMatchScreen.tsx",
+      "lineRange": [
+        13,
+        34
+      ],
+      "summary": "No-match fallback screen component displaying the failed lookup context and navigation buttons for recovery paths.",
+      "tags": [
+        "component",
+        "screen",
+        "error-handling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/screens/OnboardingScreen.tsx:OnboardingScreen",
+      "type": "function",
+      "name": "OnboardingScreen",
+      "filePath": "src/screens/OnboardingScreen.tsx",
+      "lineRange": [
+        10,
+        53
+      ],
+      "summary": "Onboarding screen component with blurred hero image, logo, branded title, tagline, founder quote card, and navigation CTA to MainTabs.",
+      "tags": [
+        "component",
+        "screen",
+        "onboarding",
+        "branding"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/screens/PermissionsScreen.tsx",
+      "type": "file",
+      "name": "PermissionsScreen.tsx",
+      "filePath": "src/screens/PermissionsScreen.tsx",
+      "summary": "Permissions onboarding screen that displays a full-bleed hero background image with a dark glass overlay footer containing a 'View Item' CTA button and camera usage instructions.",
+      "tags": [
+        "screen",
+        "component",
+        "onboarding",
+        "permissions",
+        "navigation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "func:src/screens/PermissionsScreen.tsx:PermissionsScreen",
+      "type": "function",
+      "name": "PermissionsScreen",
+      "filePath": "src/screens/PermissionsScreen.tsx",
+      "lineRange": [
+        12,
+        32
+      ],
+      "summary": "React Native screen component rendering a hero background image with a semi-transparent dark footer containing a PrimaryButton that navigates to MainTabs and helper text about camera scanning.",
+      "tags": [
+        "screen",
+        "component",
+        "onboarding",
+        "navigation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/screens/PhotoCaptureScreen.tsx",
+      "type": "file",
+      "name": "PhotoCaptureScreen.tsx",
+      "filePath": "src/screens/PhotoCaptureScreen.tsx",
+      "summary": "Photo capture testing screen that triggers a mock image lookup mutation via react-query and navigates to candidate results on success or the no-match screen on failure.",
+      "tags": [
+        "screen",
+        "component",
+        "image-lookup",
+        "mutation",
+        "testing"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/screens/PhotoCaptureScreen.tsx:PhotoCaptureScreen",
+      "type": "function",
+      "name": "PhotoCaptureScreen",
+      "filePath": "src/screens/PhotoCaptureScreen.tsx",
+      "lineRange": [
+        17,
+        53
+      ],
+      "summary": "Screen component using useMutation to invoke lookupImage with a mock camera URL, displaying preview card, sample photo trigger button, simulate-no-match button, and loading/error/empty states.",
+      "tags": [
+        "screen",
+        "component",
+        "mutation",
+        "image-lookup"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/screens/ProfileScreen.tsx",
+      "type": "file",
+      "name": "ProfileScreen.tsx",
+      "filePath": "src/screens/ProfileScreen.tsx",
+      "summary": "User profile screen that fetches current user data via react-query, displays an avatar with email initial, a confidence badge, horizontal stat cards for data mode and datasets, and informational panels.",
+      "tags": [
+        "screen",
+        "component",
+        "profile",
+        "user-data",
+        "query"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/screens/ProfileScreen.tsx:ProfileScreen",
+      "type": "function",
+      "name": "ProfileScreen",
+      "filePath": "src/screens/ProfileScreen.tsx",
+      "lineRange": [
+        13,
+        68
+      ],
+      "summary": "Screen component querying the user profile API, rendering account card with avatar initial derived from email, stat cards (Mock API, labeling mode, primary datasets), and info panels about confidence labels and upcoming settings.",
+      "tags": [
+        "screen",
+        "component",
+        "profile",
+        "query"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/screens/SavedScreen.tsx",
+      "type": "file",
+      "name": "SavedScreen.tsx",
+      "filePath": "src/screens/SavedScreen.tsx",
+      "summary": "Saved items screen that fetches the user's product shortlist via react-query and renders each saved item as a tappable ResultCard navigating to item detail.",
+      "tags": [
+        "screen",
+        "component",
+        "saved-items",
+        "query",
+        "navigation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/screens/SavedScreen.tsx:SavedScreen",
+      "type": "function",
+      "name": "SavedScreen",
+      "filePath": "src/screens/SavedScreen.tsx",
+      "lineRange": [
+        17,
+        50
+      ],
+      "summary": "Screen component that queries saved items from the user API, displays loading/error/empty states, stat cards for item count, and maps saved items to ResultCard components with navigation to ItemDetail.",
+      "tags": [
+        "screen",
+        "component",
+        "saved-items",
+        "query"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/screens/SearchScreen.tsx",
+      "type": "file",
+      "name": "SearchScreen.tsx",
+      "filePath": "src/screens/SearchScreen.tsx",
+      "summary": "Product search tab screen with a text input, category chip filters (Drinkware, Cleaning, Packaging, Appliances), and real-time react-query search results rendered as tappable ResultCards.",
+      "tags": [
+        "screen",
+        "component",
+        "search",
+        "query",
+        "navigation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/screens/SearchScreen.tsx:SearchScreen",
+      "type": "function",
+      "name": "SearchScreen",
+      "filePath": "src/screens/SearchScreen.tsx",
+      "lineRange": [
+        22,
+        73
+      ],
+      "summary": "Tab screen component implementing product search with a SearchBar, horizontal category chips, and react-query search that activates at 2+ characters, rendering results as ResultCards with navigation to ItemDetail.",
+      "tags": [
+        "screen",
+        "component",
+        "search",
+        "query"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/screens/SourceDetailScreen.tsx",
+      "type": "file",
+      "name": "SourceDetailScreen.tsx",
+      "filePath": "src/screens/SourceDetailScreen.tsx",
+      "summary": "Data source detail screen that fetches and displays metadata about an environmental data source including reference URL, dataset version, publication date, and methodology notes.",
+      "tags": [
+        "screen",
+        "component",
+        "detail-view",
+        "data-source",
+        "query"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/screens/SourceDetailScreen.tsx:SourceDetailScreen",
+      "type": "function",
+      "name": "SourceDetailScreen",
+      "filePath": "src/screens/SourceDetailScreen.tsx",
+      "lineRange": [
+        14,
+        62
+      ],
+      "summary": "Screen component that takes a sourceId route param, queries source details from the API, and renders a hero card with source name/type plus reference and ingestion metadata sections with loading and error states.",
+      "tags": [
+        "screen",
+        "component",
+        "detail-view",
+        "query"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/screens/VoiceAskScreen.tsx",
+      "type": "file",
+      "name": "VoiceAskScreen.tsx",
+      "filePath": "src/screens/VoiceAskScreen.tsx",
+      "summary": "Voice/text chat interface screen using the useVoiceChat hook to send text questions, displaying a chat bubble UI with user, assistant, and error message bubbles plus a text input with send/cancel controls.",
+      "tags": [
+        "screen",
+        "component",
+        "voice-chat",
+        "ai-assistant",
+        "interactive"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/screens/VoiceAskScreen.tsx:VoiceAskScreen",
+      "type": "function",
+      "name": "VoiceAskScreen",
+      "filePath": "src/screens/VoiceAskScreen.tsx",
+      "lineRange": [
+        23,
+        83
+      ],
+      "summary": "Chat interface screen component integrating useVoiceChat for text-based AI Q&A, rendering user/assistant/error chat bubbles in a scrollable area with a text input row showing send or cancel button based on processing state.",
+      "tags": [
+        "screen",
+        "component",
+        "voice-chat",
+        "ai-assistant"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:src/screens/VoiceAskScreen.tsx:getStatusText",
+      "type": "function",
+      "name": "getStatusText",
+      "filePath": "src/screens/VoiceAskScreen.tsx",
+      "lineRange": [
+        10,
+        19
+      ],
+      "summary": "Maps a VoicePhase enum value to a human-readable status string displayed in the voice chat UI header.",
+      "tags": [
+        "utility",
+        "voice-chat",
+        "mapping"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/theme/colors.ts",
+      "type": "file",
+      "name": "colors.ts",
+      "filePath": "src/theme/colors.ts",
+      "summary": "Defines the dark forest color palette design tokens for the app, including background, text, border, brand emerald, gold spark accent, and semantic colors, all targeting WCAG AA contrast compliance.",
+      "tags": [
+        "theme",
+        "design-tokens",
+        "config",
+        "constants",
+        "colors"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/theme/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/theme/index.ts",
+      "summary": "Barrel file that re-exports all theme tokens (colors, radius, shadows, spacing, typography) from their individual modules for convenient single-import access.",
+      "tags": [
+        "barrel",
+        "entry-point",
+        "theme",
+        "re-export",
+        "config"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/theme/radius.ts",
+      "type": "file",
+      "name": "radius.ts",
+      "filePath": "src/theme/radius.ts",
+      "summary": "Defines border radius design tokens (sm through pill) used for consistent rounded corners across UI components.",
+      "tags": [
+        "config",
+        "design-tokens",
+        "theme",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/theme/shadows.ts",
+      "type": "file",
+      "name": "shadows.ts",
+      "filePath": "src/theme/shadows.ts",
+      "summary": "Defines shadow design tokens for card elevation, providing consistent drop shadow styling across iOS and Android via shadowColor, shadowOffset, and elevation properties.",
+      "tags": [
+        "config",
+        "design-tokens",
+        "theme",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/theme/spacing.ts",
+      "type": "file",
+      "name": "spacing.ts",
+      "filePath": "src/theme/spacing.ts",
+      "summary": "Defines a spacing scale from xs (4px) to xxxl (40px) for consistent padding and margin values throughout the app.",
+      "tags": [
+        "config",
+        "design-tokens",
+        "theme",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/theme/typography.ts",
+      "type": "file",
+      "name": "typography.ts",
+      "filePath": "src/theme/typography.ts",
+      "summary": "Defines typography design tokens (display, h1, h2, title, body, bodySmall, label, caption) using the PlusJakartaSans font family with consistent sizing, weight, and color sourced from the theme colors module.",
+      "tags": [
+        "config",
+        "design-tokens",
+        "theme",
+        "typography"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/types/api.ts",
+      "type": "file",
+      "name": "api.ts",
+      "filePath": "src/types/api.ts",
+      "summary": "Defines the generic API envelope interface (ApiEnvelope<T>) and ApiError type used to wrap all API responses with data, meta, and error fields.",
+      "tags": [
+        "type-definition",
+        "api-handler",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/domain.ts",
+      "type": "file",
+      "name": "domain.ts",
+      "filePath": "src/types/domain.ts",
+      "summary": "Core domain type definitions for the product sustainability lookup feature, including MatchType, EstimateType, SourceType unions, and data shapes for ProductSummary, ImpactMetric, ItemDetail, HistoryItem, and UserProfile.",
+      "tags": [
+        "type-definition",
+        "data-model",
+        "domain-types",
+        "sustainability"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/types/restaurant.ts",
+      "type": "file",
+      "name": "restaurant.ts",
+      "filePath": "src/types/restaurant.ts",
+      "summary": "Defines restaurant-specific domain types for food carbon impact lookups, material sustainability scans, and the Sparks gamification system, plus a buildCarbonEquivalents utility that converts kg CO2e into relatable everyday comparisons.",
+      "tags": [
+        "type-definition",
+        "data-model",
+        "restaurant",
+        "sustainability",
+        "utility"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Mixes interface-only type definitions with a runtime utility function (buildCarbonEquivalents) in the same types file."
+    },
+    {
+      "id": "func:src/types/restaurant.ts:buildCarbonEquivalents",
+      "type": "function",
+      "name": "buildCarbonEquivalents",
+      "filePath": "src/types/restaurant.ts",
+      "lineRange": [
+        115,
+        137
+      ],
+      "summary": "Converts a kg CO2e value into an array of human-relatable carbon equivalents (miles driven, phone charges, tree absorption days, streaming hours), filtering out insignificantly small values.",
+      "tags": [
+        "utility",
+        "carbon-calculation",
+        "sustainability",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tmp/docs/regen_branded_docs.py",
+      "type": "file",
+      "name": "regen_branded_docs.py",
+      "filePath": "tmp/docs/regen_branded_docs.py",
+      "summary": "Generates branded DOCX documents from Markdown source files in docs/product, applying Green Life branding with custom header/footer, logo, page numbers, and themed heading colors using python-docx.",
+      "tags": [
+        "utility",
+        "document-generation",
+        "branding",
+        "tooling"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Heavy use of python-docx OOXML manipulation to build custom Word document headers, footers, and field codes for page numbering."
+    },
+    {
+      "id": "func:tmp/docs/regen_branded_docs.py:set_rpr_style",
+      "type": "function",
+      "name": "set_rpr_style",
+      "filePath": "tmp/docs/regen_branded_docs.py",
+      "lineRange": [
+        31,
+        63
+      ],
+      "summary": "Sets font name, size, color, and bold properties on a Word OOXML run properties element (rPr), creating child XML elements as needed.",
+      "tags": [
+        "document-generation",
+        "ooxml",
+        "styling"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:tmp/docs/regen_branded_docs.py:add_page_number",
+      "type": "function",
+      "name": "add_page_number",
+      "filePath": "tmp/docs/regen_branded_docs.py",
+      "lineRange": [
+        100,
+        134
+      ],
+      "summary": "Inserts a dynamic PAGE field into a footer paragraph using OOXML field character elements for automatic page numbering in generated .docx files.",
+      "tags": [
+        "document-generation",
+        "ooxml",
+        "layout"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:tmp/docs/regen_branded_docs.py:configure_header",
+      "type": "function",
+      "name": "configure_header",
+      "filePath": "tmp/docs/regen_branded_docs.py",
+      "lineRange": [
+        137,
+        159
+      ],
+      "summary": "Configures a DOCX section header with centered logo and branding text, supporting differentiated first-page and subsequent-page header layouts.",
+      "tags": [
+        "document-generation",
+        "branding",
+        "layout"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:tmp/docs/regen_branded_docs.py:render_markdown",
+      "type": "function",
+      "name": "render_markdown",
+      "filePath": "tmp/docs/regen_branded_docs.py",
+      "lineRange": [
+        177,
+        225
+      ],
+      "summary": "Parses Markdown text line-by-line and converts headings, bullet lists, numbered lists, code blocks, and body text into python-docx document elements with appropriate styling.",
+      "tags": [
+        "utility",
+        "markdown-parser",
+        "document-generation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:tmp/docs/regen_last_two.py",
+      "type": "file",
+      "name": "regen_last_two.py",
+      "filePath": "tmp/docs/regen_last_two.py",
+      "summary": "Simplified DOCX generator that converts the Executive-Summary and Engineering-Backlog Markdown files into Word documents with basic Aptos font styling and no branding or header customization.",
+      "tags": [
+        "utility",
+        "document-generation",
+        "tooling"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:tmp/docs/regen_last_two.py:render_markdown",
+      "type": "function",
+      "name": "render_markdown",
+      "filePath": "tmp/docs/regen_last_two.py",
+      "lineRange": [
+        39,
+        75
+      ],
+      "summary": "Parses markdown text and renders headings, lists, code blocks, and paragraphs into a python-docx Document with simpler styling than the branded variant.",
+      "tags": [
+        "utility",
+        "markdown-parser",
+        "document-generation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:tmp/docs/regen_product_docs.py",
+      "type": "file",
+      "name": "regen_product_docs.py",
+      "filePath": "tmp/docs/regen_product_docs.py",
+      "summary": "Converts six product specification Markdown files (Startup-Package, Screen-Map, API-Spec, Database-Schema, Frontend-Scaffold, Figma-Screen-Spec) into styled Word documents with Aptos font and code block formatting.",
+      "tags": [
+        "utility",
+        "document-generation",
+        "tooling"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "func:tmp/docs/regen_product_docs.py:render_markdown",
+      "type": "function",
+      "name": "render_markdown",
+      "filePath": "tmp/docs/regen_product_docs.py",
+      "lineRange": [
+        64,
+        104
+      ],
+      "summary": "Parses markdown and renders into docx elements, delegating bullet and numbered list items to dedicated helper functions for cleaner separation of concerns.",
+      "tags": [
+        "utility",
+        "markdown-parser",
+        "document-generation"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:index.js",
+      "target": "file:App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:App.tsx",
+      "target": "file:src/navigation/RootNavigator.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:App.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/controllers/lookup.ts",
+      "target": "file:server/services/restaurant/foodEmissionService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/controllers/lookup.ts",
+      "target": "file:server/services/restaurant/materialImpactService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/controllers/lookup.ts",
+      "target": "file:server/services/restaurant/sparksService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/controllers/lookup.ts",
+      "target": "file:server/services/restaurant/visionService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/controllers/lookup.ts",
+      "target": "file:server/services/restaurant/usdaService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/controllers/lookup.ts",
+      "target": "file:server/services/restaurant/climatiqService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/controllers/lookup.ts",
+      "target": "file:server/types/restaurant.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/controllers/search.ts",
+      "target": "file:server/services/restaurant/foodEmissionService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/controllers/search.ts",
+      "target": "file:server/services/restaurant/sparksService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/controllers/search.ts",
+      "target": "file:server/services/restaurant/usdaService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/controllers/search.ts",
+      "target": "file:server/types/restaurant.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/services/restaurant/climatiqService.ts",
+      "target": "file:server/services/restaurant/foodEmissionService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/controllers/lookup.ts",
+      "target": "func:server/controllers/lookup.ts:createLookupController",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:server/controllers/lookup.ts",
+      "target": "func:server/controllers/lookup.ts:createLookupController",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:server/controllers/search.ts",
+      "target": "func:server/controllers/search.ts:createSearchController",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:server/controllers/search.ts",
+      "target": "func:server/controllers/search.ts:createSearchController",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:mock-api-server.js",
+      "target": "func:mock-api-server.js:send",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:server/services/restaurant/climatiqService.ts",
+      "target": "class:server/services/restaurant/climatiqService.ts:ClimatiqService",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:server/services/restaurant/climatiqService.ts",
+      "target": "class:server/services/restaurant/climatiqService.ts:ClimatiqService",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:server/db/seeds/food_emission_factors.ts",
+      "target": "func:server/db/seeds/food_emission_factors.ts:seedFoodEmissionFactors",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:server/db/seeds/food_emission_factors.ts",
+      "target": "func:server/db/seeds/food_emission_factors.ts:seedFoodEmissionFactors",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:server/db/seeds/material_impacts.ts",
+      "target": "func:server/db/seeds/material_impacts.ts:seedMaterialImpacts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:server/db/seeds/material_impacts.ts",
+      "target": "func:server/db/seeds/material_impacts.ts:seedMaterialImpacts",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:index.js",
+      "target": "file:App.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:server/services/restaurant/foodEmissionService.ts",
+      "target": "class:server/services/restaurant/foodEmissionService.ts:FoodEmissionService",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:server/services/restaurant/materialImpactService.ts",
+      "target": "class:server/services/restaurant/materialImpactService.ts:MaterialImpactService",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:server/services/restaurant/sparksService.ts",
+      "target": "class:server/services/restaurant/sparksService.ts:SparksService",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:server/services/restaurant/usdaService.ts",
+      "target": "class:server/services/restaurant/usdaService.ts:UsdaService",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:server/services/restaurant/visionService.ts",
+      "target": "class:server/services/restaurant/visionService.ts:VisionService",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:server/types/restaurant.ts",
+      "target": "func:server/types/restaurant.ts:buildCarbonEquivalents",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/api/claude.ts",
+      "target": "func:src/api/claude.ts:askClaude",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/api/client.ts",
+      "target": "func:src/api/client.ts:apiFetch",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/api/items.ts",
+      "target": "func:src/api/items.ts:getItemDetail",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:server/services/restaurant/foodEmissionService.ts",
+      "target": "class:server/services/restaurant/foodEmissionService.ts:FoodEmissionService",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:server/services/restaurant/materialImpactService.ts",
+      "target": "class:server/services/restaurant/materialImpactService.ts:MaterialImpactService",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:server/services/restaurant/sparksService.ts",
+      "target": "class:server/services/restaurant/sparksService.ts:SparksService",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:server/services/restaurant/usdaService.ts",
+      "target": "class:server/services/restaurant/usdaService.ts:UsdaService",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:server/services/restaurant/visionService.ts",
+      "target": "class:server/services/restaurant/visionService.ts:VisionService",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:server/types/restaurant.ts",
+      "target": "func:server/types/restaurant.ts:buildCarbonEquivalents",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/api/claude.ts",
+      "target": "func:src/api/claude.ts:askClaude",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/api/client.ts",
+      "target": "func:src/api/client.ts:apiFetch",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/api/items.ts",
+      "target": "func:src/api/items.ts:getItemDetail",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:server/types/restaurant.ts",
+      "target": "file:server/services/restaurant/foodEmissionService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/types/restaurant.ts",
+      "target": "file:server/services/restaurant/materialImpactService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:server/types/restaurant.ts",
+      "target": "file:server/services/restaurant/sparksService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/client.ts",
+      "target": "file:src/api/mockData.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/items.ts",
+      "target": "file:src/api/client.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/items.ts",
+      "target": "file:src/types/api.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/items.ts",
+      "target": "file:src/types/domain.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "func:src/api/items.ts:getItemDetail",
+      "target": "func:src/api/client.ts:apiFetch",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/api/lookup.ts",
+      "target": "file:src/api/client.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/lookup.ts",
+      "target": "file:src/types/api.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/lookup.ts",
+      "target": "file:src/types/domain.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/lookup.ts",
+      "target": "func:src/api/lookup.ts:lookupBarcode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/api/lookup.ts",
+      "target": "func:src/api/lookup.ts:search",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/api/lookup.ts",
+      "target": "func:src/api/lookup.ts:lookupImage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/api/lookup.ts",
+      "target": "func:src/api/lookup.ts:lookupBarcode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/api/lookup.ts",
+      "target": "func:src/api/lookup.ts:search",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/api/lookup.ts",
+      "target": "func:src/api/lookup.ts:lookupImage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/api/mockData.ts",
+      "target": "file:src/types/api.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/mockData.ts",
+      "target": "file:src/types/domain.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/mockData.ts",
+      "target": "func:src/api/mockData.ts:mockFetch",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/api/mockData.ts",
+      "target": "func:src/api/mockData.ts:mockFetch",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/api/restaurantLookup.ts",
+      "target": "file:src/api/client.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/restaurantLookup.ts",
+      "target": "file:src/types/api.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/restaurantLookup.ts",
+      "target": "file:src/types/restaurant.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/restaurantLookup.ts",
+      "target": "func:src/api/restaurantLookup.ts:scanFoodPhoto",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/api/restaurantLookup.ts",
+      "target": "func:src/api/restaurantLookup.ts:scanMaterial",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/api/restaurantLookup.ts",
+      "target": "func:src/api/restaurantLookup.ts:searchMenuItem",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/api/restaurantLookup.ts",
+      "target": "func:src/api/restaurantLookup.ts:fetchSparksSummary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/api/restaurantLookup.ts",
+      "target": "func:src/api/restaurantLookup.ts:scanFoodPhoto",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/api/restaurantLookup.ts",
+      "target": "func:src/api/restaurantLookup.ts:scanMaterial",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/api/restaurantLookup.ts",
+      "target": "func:src/api/restaurantLookup.ts:searchMenuItem",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/api/restaurantLookup.ts",
+      "target": "func:src/api/restaurantLookup.ts:fetchSparksSummary",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/api/sources.ts",
+      "target": "file:src/api/client.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/sources.ts",
+      "target": "file:src/types/api.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/sources.ts",
+      "target": "file:src/types/domain.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/user.ts",
+      "target": "file:src/api/client.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/user.ts",
+      "target": "file:src/types/api.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/api/user.ts",
+      "target": "file:src/types/domain.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/item/ConfidenceBadge.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/item/MatchBadge.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/item/MatchBadge.tsx",
+      "target": "file:src/types/domain.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/item/ResultCard.tsx",
+      "target": "file:src/components/item/MatchBadge.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/item/ResultCard.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/item/ResultCard.tsx",
+      "target": "file:src/types/domain.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/metrics/MetricRow.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/metrics/MetricRow.tsx",
+      "target": "file:src/types/domain.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/metrics/MetricRow.tsx",
+      "target": "func:src/components/metrics/MetricRow.tsx:MetricRow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/metrics/MetricRow.tsx",
+      "target": "func:src/components/metrics/MetricRow.tsx:MetricRow",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/components/restaurant/FoodImpactCard.tsx",
+      "target": "file:src/theme/colors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/restaurant/FoodImpactCard.tsx",
+      "target": "file:src/types/restaurant.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/restaurant/FoodImpactCard.tsx",
+      "target": "func:src/components/restaurant/FoodImpactCard.tsx:FoodImpactCard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/restaurant/FoodImpactCard.tsx",
+      "target": "func:src/components/restaurant/FoodImpactCard.tsx:FoodImpactCard",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/components/restaurant/MaterialImpactCard.tsx",
+      "target": "file:src/theme/colors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/restaurant/MaterialImpactCard.tsx",
+      "target": "file:src/types/restaurant.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/restaurant/MaterialImpactCard.tsx",
+      "target": "func:src/components/restaurant/MaterialImpactCard.tsx:MaterialImpactCard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/restaurant/MaterialImpactCard.tsx",
+      "target": "func:src/components/restaurant/MaterialImpactCard.tsx:MaterialImpactCard",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/components/restaurant/SparksBadge.tsx",
+      "target": "file:src/theme/colors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/restaurant/SparksBadge.tsx",
+      "target": "file:src/hooks/useSparks.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/restaurant/SparksBadge.tsx",
+      "target": "func:src/components/restaurant/SparksBadge.tsx:SparksBadge",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/restaurant/SparksBadge.tsx",
+      "target": "func:src/components/restaurant/SparksBadge.tsx:SparksToast",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/restaurant/SparksBadge.tsx",
+      "target": "func:src/components/restaurant/SparksBadge.tsx:SparksBadge",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/components/restaurant/SparksBadge.tsx",
+      "target": "func:src/components/restaurant/SparksBadge.tsx:SparksToast",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/components/ui/BrandFooter.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/ui/EmptyState.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/ui/ErrorState.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/ui/LoadingState.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/ui/PrimaryButton.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/ui/PrimaryButton.tsx",
+      "target": "func:src/components/ui/PrimaryButton.tsx:PrimaryButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/ui/PrimaryButton.tsx",
+      "target": "func:src/components/ui/PrimaryButton.tsx:PrimaryButton",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/components/ui/Screen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/ui/SearchBar.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/ui/SecondaryButton.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/ui/StatCard.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/hooks/useRestaurantScan.ts",
+      "target": "file:src/api/restaurantLookup.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/hooks/useRestaurantScan.ts",
+      "target": "file:src/hooks/useSparks.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/hooks/useRestaurantScan.ts",
+      "target": "file:src/types/restaurant.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/hooks/useSparks.ts",
+      "target": "file:src/api/restaurantLookup.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/hooks/useSparks.ts",
+      "target": "file:src/types/restaurant.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/hooks/useVoiceChat.ts",
+      "target": "file:src/api/claude.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/hooks/useVoiceChat.ts",
+      "target": "file:src/api/user.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/hooks/useVoiceChat.ts",
+      "target": "file:src/api/whisper.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/MainTabs.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/MainTabs.tsx",
+      "target": "file:src/screens/HomeScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/MainTabs.tsx",
+      "target": "file:src/screens/ProfileScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/MainTabs.tsx",
+      "target": "file:src/screens/SavedScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/MainTabs.tsx",
+      "target": "file:src/screens/SearchScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/MainTabs.tsx",
+      "target": "file:src/screens/VoiceAskScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/MainTabs.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "file:src/navigation/MainTabs.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "file:src/screens/AuthScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "file:src/screens/BarcodeScannerScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "file:src/screens/CandidateResultsScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "file:src/screens/ItemDetailScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "file:src/screens/MetricDetailScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "file:src/screens/NoMatchScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "file:src/screens/OnboardingScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "file:src/screens/PermissionsScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "file:src/screens/PhotoCaptureScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "file:src/screens/SourceDetailScreen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/hooks/useRestaurantScan.ts",
+      "target": "func:src/hooks/useRestaurantScan.ts:useFoodPhotoScan",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/hooks/useRestaurantScan.ts",
+      "target": "func:src/hooks/useRestaurantScan.ts:useMaterialScan",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/hooks/useRestaurantScan.ts",
+      "target": "func:src/hooks/useRestaurantScan.ts:useMenuSearch",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/hooks/useSparks.ts",
+      "target": "func:src/hooks/useSparks.ts:useSparksSummary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/hooks/useVoiceChat.ts",
+      "target": "func:src/hooks/useVoiceChat.ts:useVoiceChat",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/navigation/MainTabs.tsx",
+      "target": "func:src/navigation/MainTabs.tsx:MainTabs",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "func:src/navigation/RootNavigator.tsx:RootNavigator",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/hooks/useRestaurantScan.ts",
+      "target": "func:src/hooks/useRestaurantScan.ts:useFoodPhotoScan",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/hooks/useRestaurantScan.ts",
+      "target": "func:src/hooks/useRestaurantScan.ts:useMaterialScan",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/hooks/useRestaurantScan.ts",
+      "target": "func:src/hooks/useRestaurantScan.ts:useMenuSearch",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/hooks/useSparks.ts",
+      "target": "func:src/hooks/useSparks.ts:useSparksSummary",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/hooks/useVoiceChat.ts",
+      "target": "func:src/hooks/useVoiceChat.ts:useVoiceChat",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/navigation/MainTabs.tsx",
+      "target": "func:src/navigation/MainTabs.tsx:MainTabs",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/navigation/RootNavigator.tsx",
+      "target": "func:src/navigation/RootNavigator.tsx:RootNavigator",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/hooks/useRestaurantScan.ts",
+      "target": "file:src/api/restaurantLookup.ts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/hooks/useVoiceChat.ts",
+      "target": "file:src/api/claude.ts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/hooks/useVoiceChat.ts",
+      "target": "file:src/api/user.ts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/hooks/useVoiceChat.ts",
+      "target": "file:src/api/whisper.ts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/hooks/useSparks.ts",
+      "target": "file:src/api/restaurantLookup.ts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/navigation/types.ts",
+      "target": "file:src/types/domain.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/AuthScreen.tsx",
+      "target": "file:src/components/ui/PrimaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/AuthScreen.tsx",
+      "target": "file:src/components/ui/Screen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/AuthScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/AuthScreen.tsx",
+      "target": "func:src/screens/AuthScreen.tsx:AuthScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/AuthScreen.tsx",
+      "target": "func:src/screens/AuthScreen.tsx:AuthScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/BarcodeScannerScreen.tsx",
+      "target": "file:src/api/lookup.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/BarcodeScannerScreen.tsx",
+      "target": "file:src/components/item/ConfidenceBadge.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/BarcodeScannerScreen.tsx",
+      "target": "file:src/components/ui/EmptyState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/BarcodeScannerScreen.tsx",
+      "target": "file:src/components/ui/ErrorState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/BarcodeScannerScreen.tsx",
+      "target": "file:src/components/ui/LoadingState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/BarcodeScannerScreen.tsx",
+      "target": "file:src/components/ui/PrimaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/BarcodeScannerScreen.tsx",
+      "target": "file:src/components/ui/Screen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/BarcodeScannerScreen.tsx",
+      "target": "file:src/components/ui/SecondaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/BarcodeScannerScreen.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/BarcodeScannerScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/BarcodeScannerScreen.tsx",
+      "target": "func:src/screens/BarcodeScannerScreen.tsx:BarcodeScannerScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/BarcodeScannerScreen.tsx",
+      "target": "func:src/screens/BarcodeScannerScreen.tsx:BarcodeScannerScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/CandidateResultsScreen.tsx",
+      "target": "file:src/components/item/ConfidenceBadge.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CandidateResultsScreen.tsx",
+      "target": "file:src/components/item/ResultCard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CandidateResultsScreen.tsx",
+      "target": "file:src/components/ui/Screen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CandidateResultsScreen.tsx",
+      "target": "file:src/components/ui/SecondaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CandidateResultsScreen.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CandidateResultsScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CandidateResultsScreen.tsx",
+      "target": "func:src/screens/CandidateResultsScreen.tsx:CandidateResultsScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/CandidateResultsScreen.tsx",
+      "target": "func:src/screens/CandidateResultsScreen.tsx:CandidateResultsScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/api/user.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/components/item/ConfidenceBadge.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/components/item/ResultCard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/components/ui/BrandFooter.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/components/ui/EmptyState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/components/ui/ErrorState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/components/ui/LoadingState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/components/ui/PrimaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/components/ui/Screen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/components/ui/SearchBar.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/components/ui/SecondaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/components/ui/StatCard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "func:src/screens/HomeScreen.tsx:HomeScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/HomeScreen.tsx",
+      "target": "func:src/screens/HomeScreen.tsx:HomeScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/api/items.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/api/user.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/components/item/ConfidenceBadge.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/components/item/MatchBadge.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/components/metrics/MetricRow.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/components/ui/EmptyState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/components/ui/ErrorState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/components/ui/LoadingState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/components/ui/PrimaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/components/ui/Screen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/components/ui/SecondaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/components/ui/StatCard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "func:src/screens/ItemDetailScreen.tsx:ItemDetailScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/ItemDetailScreen.tsx",
+      "target": "func:src/screens/ItemDetailScreen.tsx:ItemDetailScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/MetricDetailScreen.tsx",
+      "target": "file:src/api/items.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/MetricDetailScreen.tsx",
+      "target": "file:src/components/item/ConfidenceBadge.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/MetricDetailScreen.tsx",
+      "target": "file:src/components/ui/EmptyState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/MetricDetailScreen.tsx",
+      "target": "file:src/components/ui/ErrorState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/MetricDetailScreen.tsx",
+      "target": "file:src/components/ui/LoadingState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/MetricDetailScreen.tsx",
+      "target": "file:src/components/ui/Screen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/MetricDetailScreen.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/MetricDetailScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/MetricDetailScreen.tsx",
+      "target": "func:src/screens/MetricDetailScreen.tsx:MetricDetailScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/MetricDetailScreen.tsx",
+      "target": "func:src/screens/MetricDetailScreen.tsx:MetricDetailScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/NoMatchScreen.tsx",
+      "target": "file:src/components/ui/EmptyState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/NoMatchScreen.tsx",
+      "target": "file:src/components/ui/PrimaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/NoMatchScreen.tsx",
+      "target": "file:src/components/ui/Screen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/NoMatchScreen.tsx",
+      "target": "file:src/components/ui/SecondaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/NoMatchScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/NoMatchScreen.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/NoMatchScreen.tsx",
+      "target": "func:src/screens/NoMatchScreen.tsx:NoMatchScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/NoMatchScreen.tsx",
+      "target": "func:src/screens/NoMatchScreen.tsx:NoMatchScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/OnboardingScreen.tsx",
+      "target": "file:src/components/ui/PrimaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/OnboardingScreen.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/OnboardingScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/OnboardingScreen.tsx",
+      "target": "func:src/screens/OnboardingScreen.tsx:OnboardingScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/OnboardingScreen.tsx",
+      "target": "func:src/screens/OnboardingScreen.tsx:OnboardingScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/PermissionsScreen.tsx",
+      "target": "func:src/screens/PermissionsScreen.tsx:PermissionsScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/PermissionsScreen.tsx",
+      "target": "func:src/screens/PermissionsScreen.tsx:PermissionsScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/PermissionsScreen.tsx",
+      "target": "file:src/components/ui/BrandFooter.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/PermissionsScreen.tsx",
+      "target": "file:src/components/ui/PrimaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/PermissionsScreen.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/PermissionsScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/PhotoCaptureScreen.tsx",
+      "target": "func:src/screens/PhotoCaptureScreen.tsx:PhotoCaptureScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/PhotoCaptureScreen.tsx",
+      "target": "func:src/screens/PhotoCaptureScreen.tsx:PhotoCaptureScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/PhotoCaptureScreen.tsx",
+      "target": "file:src/api/lookup.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/PhotoCaptureScreen.tsx",
+      "target": "file:src/components/ui/EmptyState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/PhotoCaptureScreen.tsx",
+      "target": "file:src/components/ui/ErrorState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/PhotoCaptureScreen.tsx",
+      "target": "file:src/components/ui/LoadingState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/PhotoCaptureScreen.tsx",
+      "target": "file:src/components/ui/PrimaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/PhotoCaptureScreen.tsx",
+      "target": "file:src/components/ui/Screen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/PhotoCaptureScreen.tsx",
+      "target": "file:src/components/ui/SecondaryButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/PhotoCaptureScreen.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/PhotoCaptureScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ProfileScreen.tsx",
+      "target": "func:src/screens/ProfileScreen.tsx:ProfileScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/ProfileScreen.tsx",
+      "target": "func:src/screens/ProfileScreen.tsx:ProfileScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/ProfileScreen.tsx",
+      "target": "file:src/api/user.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ProfileScreen.tsx",
+      "target": "file:src/components/item/ConfidenceBadge.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ProfileScreen.tsx",
+      "target": "file:src/components/ui/BrandFooter.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ProfileScreen.tsx",
+      "target": "file:src/components/ui/ErrorState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ProfileScreen.tsx",
+      "target": "file:src/components/ui/LoadingState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ProfileScreen.tsx",
+      "target": "file:src/components/ui/Screen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ProfileScreen.tsx",
+      "target": "file:src/components/ui/StatCard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/ProfileScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SavedScreen.tsx",
+      "target": "func:src/screens/SavedScreen.tsx:SavedScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/SavedScreen.tsx",
+      "target": "func:src/screens/SavedScreen.tsx:SavedScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/SavedScreen.tsx",
+      "target": "file:src/api/user.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SavedScreen.tsx",
+      "target": "file:src/components/item/ResultCard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SavedScreen.tsx",
+      "target": "file:src/components/ui/BrandFooter.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SavedScreen.tsx",
+      "target": "file:src/components/ui/EmptyState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SavedScreen.tsx",
+      "target": "file:src/components/ui/ErrorState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SavedScreen.tsx",
+      "target": "file:src/components/ui/LoadingState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SavedScreen.tsx",
+      "target": "file:src/components/ui/Screen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SavedScreen.tsx",
+      "target": "file:src/components/ui/StatCard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SavedScreen.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SavedScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SearchScreen.tsx",
+      "target": "func:src/screens/SearchScreen.tsx:SearchScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/SearchScreen.tsx",
+      "target": "func:src/screens/SearchScreen.tsx:SearchScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/SearchScreen.tsx",
+      "target": "file:src/api/lookup.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SearchScreen.tsx",
+      "target": "file:src/components/item/ResultCard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SearchScreen.tsx",
+      "target": "file:src/components/ui/BrandFooter.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SearchScreen.tsx",
+      "target": "file:src/components/ui/EmptyState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SearchScreen.tsx",
+      "target": "file:src/components/ui/ErrorState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SearchScreen.tsx",
+      "target": "file:src/components/ui/LoadingState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SearchScreen.tsx",
+      "target": "file:src/components/ui/Screen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SearchScreen.tsx",
+      "target": "file:src/components/ui/SearchBar.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SearchScreen.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SearchScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SourceDetailScreen.tsx",
+      "target": "func:src/screens/SourceDetailScreen.tsx:SourceDetailScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/SourceDetailScreen.tsx",
+      "target": "func:src/screens/SourceDetailScreen.tsx:SourceDetailScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/SourceDetailScreen.tsx",
+      "target": "file:src/api/sources.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SourceDetailScreen.tsx",
+      "target": "file:src/components/ui/ErrorState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SourceDetailScreen.tsx",
+      "target": "file:src/components/ui/LoadingState.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SourceDetailScreen.tsx",
+      "target": "file:src/components/ui/Screen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SourceDetailScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/SourceDetailScreen.tsx",
+      "target": "file:src/navigation/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/VoiceAskScreen.tsx",
+      "target": "func:src/screens/VoiceAskScreen.tsx:VoiceAskScreen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/VoiceAskScreen.tsx",
+      "target": "func:src/screens/VoiceAskScreen.tsx:VoiceAskScreen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/VoiceAskScreen.tsx",
+      "target": "func:src/screens/VoiceAskScreen.tsx:getStatusText",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/VoiceAskScreen.tsx",
+      "target": "file:src/components/ui/Screen.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/VoiceAskScreen.tsx",
+      "target": "file:src/hooks/useVoiceChat.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/VoiceAskScreen.tsx",
+      "target": "file:src/theme/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/theme/index.ts",
+      "target": "file:src/theme/colors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/theme/index.ts",
+      "target": "file:src/theme/radius.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/theme/index.ts",
+      "target": "file:src/theme/shadows.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/theme/index.ts",
+      "target": "file:src/theme/spacing.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/theme/index.ts",
+      "target": "file:src/theme/typography.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/theme/typography.ts",
+      "target": "file:src/theme/colors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/types/restaurant.ts",
+      "target": "func:src/types/restaurant.ts:buildCarbonEquivalents",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/types/restaurant.ts",
+      "target": "func:src/types/restaurant.ts:buildCarbonEquivalents",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tmp/docs/regen_branded_docs.py",
+      "target": "func:tmp/docs/regen_branded_docs.py:set_rpr_style",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:tmp/docs/regen_branded_docs.py",
+      "target": "func:tmp/docs/regen_branded_docs.py:add_page_number",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:tmp/docs/regen_branded_docs.py",
+      "target": "func:tmp/docs/regen_branded_docs.py:configure_header",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:tmp/docs/regen_branded_docs.py",
+      "target": "func:tmp/docs/regen_branded_docs.py:render_markdown",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:tmp/docs/regen_last_two.py",
+      "target": "func:tmp/docs/regen_last_two.py:render_markdown",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:tmp/docs/regen_product_docs.py",
+      "target": "func:tmp/docs/regen_product_docs.py:render_markdown",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/api/whisper.ts",
+      "target": "func:src/api/whisper.ts:transcribeAudio",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/api/whisper.ts",
+      "target": "func:src/api/whisper.ts:transcribeAudio",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ],
+  "layers": [
+    {
+      "id": "layer:screens-navigation",
+      "name": "Screens & Navigation",
+      "description": "App entry points, React Navigation stack/tab configuration, and all screen-level components that compose the user-facing views for scanning, searching, and viewing environmental impact data.",
+      "nodeIds": [
+        "file:App.tsx",
+        "file:index.js",
+        "file:src/navigation/MainTabs.tsx",
+        "file:src/navigation/RootNavigator.tsx",
+        "file:src/navigation/types.ts",
+        "file:src/screens/AuthScreen.tsx",
+        "file:src/screens/BarcodeScannerScreen.tsx",
+        "file:src/screens/CandidateResultsScreen.tsx",
+        "file:src/screens/HomeScreen.tsx",
+        "file:src/screens/ItemDetailScreen.tsx",
+        "file:src/screens/MetricDetailScreen.tsx",
+        "file:src/screens/NoMatchScreen.tsx",
+        "file:src/screens/OnboardingScreen.tsx",
+        "file:src/screens/PermissionsScreen.tsx",
+        "file:src/screens/PhotoCaptureScreen.tsx",
+        "file:src/screens/ProfileScreen.tsx",
+        "file:src/screens/SavedScreen.tsx",
+        "file:src/screens/SearchScreen.tsx",
+        "file:src/screens/SourceDetailScreen.tsx",
+        "file:src/screens/VoiceAskScreen.tsx"
+      ]
+    },
+    {
+      "id": "layer:ui-components",
+      "name": "UI Components",
+      "description": "Reusable React Native presentational components including generic UI primitives (buttons, cards, states), item display badges, metric rows, and restaurant-specific impact cards.",
+      "nodeIds": [
+        "file:src/components/item/ConfidenceBadge.tsx",
+        "file:src/components/item/MatchBadge.tsx",
+        "file:src/components/item/ResultCard.tsx",
+        "file:src/components/metrics/MetricRow.tsx",
+        "file:src/components/restaurant/FoodImpactCard.tsx",
+        "file:src/components/restaurant/MaterialImpactCard.tsx",
+        "file:src/components/restaurant/SparksBadge.tsx",
+        "file:src/components/ui/BrandFooter.tsx",
+        "file:src/components/ui/EmptyState.tsx",
+        "file:src/components/ui/ErrorState.tsx",
+        "file:src/components/ui/LoadingState.tsx",
+        "file:src/components/ui/PrimaryButton.tsx",
+        "file:src/components/ui/Screen.tsx",
+        "file:src/components/ui/SearchBar.tsx",
+        "file:src/components/ui/SecondaryButton.tsx",
+        "file:src/components/ui/StatCard.tsx"
+      ]
+    },
+    {
+      "id": "layer:data-access",
+      "name": "Data Access & Hooks",
+      "description": "Client-side API modules for product lookup, user data, and external AI services, plus React hooks that orchestrate data fetching, mutations, and local state synchronization via React Query and Zustand.",
+      "nodeIds": [
+        "file:src/api/claude.ts",
+        "file:src/api/client.ts",
+        "file:src/api/items.ts",
+        "file:src/api/lookup.ts",
+        "file:src/api/mockData.ts",
+        "file:src/api/restaurantLookup.ts",
+        "file:src/api/sources.ts",
+        "file:src/api/user.ts",
+        "file:src/api/whisper.ts",
+        "file:src/hooks/useRestaurantScan.ts",
+        "file:src/hooks/useSparks.ts",
+        "file:src/hooks/useVoiceChat.ts"
+      ]
+    },
+    {
+      "id": "layer:server",
+      "name": "Server",
+      "description": "Express backend with controllers for image lookup and search, domain services for food emissions, material impacts, vision recognition, USDA nutrition, Climatiq carbon estimation, Sparks gamification, database seed data, and shared server types.",
+      "nodeIds": [
+        "file:server/controllers/lookup.ts",
+        "file:server/controllers/search.ts",
+        "file:server/db/seeds/food_emission_factors.ts",
+        "file:server/db/seeds/material_impacts.ts",
+        "file:server/services/restaurant/climatiqService.ts",
+        "file:server/services/restaurant/foodEmissionService.ts",
+        "file:server/services/restaurant/materialImpactService.ts",
+        "file:server/services/restaurant/sparksService.ts",
+        "file:server/services/restaurant/usdaService.ts",
+        "file:server/services/restaurant/visionService.ts",
+        "file:server/types/restaurant.ts"
+      ]
+    },
+    {
+      "id": "layer:foundation",
+      "name": "Foundation",
+      "description": "Design system tokens (colors, typography, spacing, radius, shadows), shared TypeScript type definitions for the domain and API contracts, and build configuration.",
+      "nodeIds": [
+        "file:babel.config.js",
+        "file:src/theme/colors.ts",
+        "file:src/theme/index.ts",
+        "file:src/theme/radius.ts",
+        "file:src/theme/shadows.ts",
+        "file:src/theme/spacing.ts",
+        "file:src/theme/typography.ts",
+        "file:src/types/api.ts",
+        "file:src/types/domain.ts",
+        "file:src/types/restaurant.ts"
+      ]
+    },
+    {
+      "id": "layer:tooling",
+      "name": "Tooling",
+      "description": "Development utilities including the standalone mock API server for offline UI development and Python scripts for generating branded product documentation from Markdown sources.",
+      "nodeIds": [
+        "file:mock-api-server.js",
+        "file:tmp/docs/regen_branded_docs.py",
+        "file:tmp/docs/regen_last_two.py",
+        "file:tmp/docs/regen_product_docs.py"
+      ]
+    }
+  ],
+  "tour": [
+    {
+      "order": 1,
+      "title": "App Bootstrap",
+      "description": "Start at the application entry point. index.js registers the root component via Expo's registerRootComponent, which hands off to App.tsx. App.tsx bootstraps the entire application by loading custom fonts (PlusJakartaSans), initializing React Query for server state management, wrapping everything in a dark-themed NavigationContainer, and managing the splash screen lifecycle. This is the single point where all top-level providers and configurations converge.",
+      "nodeIds": [
+        "file:index.js",
+        "file:App.tsx"
+      ],
+      "languageLesson": "React Native apps use registerRootComponent instead of ReactDOM.render. Expo abstracts platform-specific bootstrapping (AppRegistry on iOS/Android) behind this single call."
+    },
+    {
+      "order": 2,
+      "title": "Domain Types",
+      "description": "Before exploring any features, understand the vocabulary of the codebase. domain.ts defines the core data shapes -- ProductSummary, ImpactMetric, ItemDetail, HistoryItem, and UserProfile -- along with union types like MatchType (exact, probable, estimate) and EstimateType that communicate data confidence to users. api.ts provides the generic ApiEnvelope<T> wrapper that standardizes all API responses with data, meta, and error fields. Every screen, API call, and component speaks this shared language.",
+      "nodeIds": [
+        "file:src/types/domain.ts",
+        "file:src/types/api.ts"
+      ],
+      "languageLesson": "TypeScript union types like 'exact' | 'probable' | 'estimate' create exhaustive, compiler-checked enumerations without the overhead of enums. The generic ApiEnvelope<T> pattern enforces a consistent response shape across all endpoints."
+    },
+    {
+      "order": 3,
+      "title": "Design System Tokens",
+      "description": "The theme system is the most widely imported module in the codebase, used by virtually every UI component and screen. The barrel file src/theme/index.ts re-exports five token modules: colors (dark forest palette targeting WCAG AA), typography (PlusJakartaSans font scale), spacing (4px-to-40px scale), radius (sm through pill), and shadows (card elevation). This design-token architecture ensures visual consistency and makes global theme changes trivial -- change one token, update the entire app.",
+      "nodeIds": [
+        "file:src/theme/index.ts",
+        "file:src/theme/colors.ts",
+        "file:src/theme/typography.ts",
+        "file:src/theme/spacing.ts"
+      ],
+      "languageLesson": "Barrel files (index.ts that re-exports) create a clean public API surface. Consumers import from 'src/theme' rather than reaching into individual token files, which allows internal restructuring without breaking imports."
+    },
+    {
+      "order": 4,
+      "title": "Navigation Architecture",
+      "description": "Navigation defines how users move through the app. RootNavigator.tsx sets up a native stack with the complete screen hierarchy: onboarding, authentication, main tabs, barcode scanning, photo capture, and detail screens. MainTabs.tsx configures the bottom tab navigator with five tabs (Home, Search, Saved, Profile, Ask) using Feather icons. types.ts defines RootStackParamList and MainTabParamList for type-safe navigation -- every navigation.navigate() call is checked at compile time against these param lists.",
+      "nodeIds": [
+        "file:src/navigation/RootNavigator.tsx",
+        "file:src/navigation/MainTabs.tsx",
+        "file:src/navigation/types.ts"
+      ],
+      "languageLesson": "React Navigation's TypeScript integration uses ParamList type maps (e.g., RootStackParamList) to enforce that every navigate() call passes the correct parameters for each route. This prevents runtime crashes from missing or mistyped route params."
+    },
+    {
+      "order": 5,
+      "title": "Shared UI Components",
+      "description": "The components/ui directory provides the reusable building blocks that every screen assembles from. Screen.tsx wraps content in SafeAreaView with consistent background and padding. PrimaryButton and SecondaryButton offer size/variant combinations for CTAs. LoadingState, ErrorState, and EmptyState handle the three async data states that appear on nearly every screen. SearchBar, StatCard, and BrandFooter round out the shared kit. These components consume theme tokens directly, so the design system from Step 3 flows through every pixel.",
+      "nodeIds": [
+        "file:src/components/ui/Screen.tsx",
+        "file:src/components/ui/PrimaryButton.tsx",
+        "file:src/components/ui/LoadingState.tsx",
+        "file:src/components/ui/ErrorState.tsx",
+        "file:src/components/ui/EmptyState.tsx"
+      ]
+    },
+    {
+      "order": 6,
+      "title": "API Client Layer",
+      "description": "The API client module mediates all server communication. client.ts provides the central apiFetch wrapper, which checks an environment variable to route requests through either mockData.ts (for offline development) or the real Green Life server. This mock/real toggle is the key architectural decision -- it lets the frontend team iterate on screens without a running backend. The domain-specific modules (items.ts, lookup.ts, sources.ts, user.ts) are thin typed wrappers that delegate to apiFetch, each returning properly typed ApiEnvelope responses.",
+      "nodeIds": [
+        "file:src/api/client.ts",
+        "file:src/api/mockData.ts",
+        "file:src/api/lookup.ts",
+        "file:src/api/items.ts",
+        "file:src/api/user.ts"
+      ]
+    },
+    {
+      "order": 7,
+      "title": "Home and Search Screens",
+      "description": "HomeScreen.tsx is the app's landing dashboard, pulling together search, quick-scan action cards, stat cards, a trust notice with confidence badge, and recent scan history loaded via React Query. SearchScreen.tsx implements real-time product search with a text input, horizontal category chips (Drinkware, Cleaning, Packaging, Appliances), and results rendered as tappable ResultCard components. Both screens showcase the pattern used throughout: React Query for server state, theme tokens for styling, and shared UI components for consistent loading/error/empty states.",
+      "nodeIds": [
+        "file:src/screens/HomeScreen.tsx",
+        "file:src/screens/SearchScreen.tsx"
+      ]
+    },
+    {
+      "order": 8,
+      "title": "Product Detail Flow",
+      "description": "The product detail flow is the core user journey. BarcodeScannerScreen manages barcode input and calls lookupBarcode, navigating to ItemDetail on success or NoMatch on failure. PhotoCaptureScreen triggers image lookups that land on CandidateResultsScreen with ranked matches. ItemDetailScreen is the richest screen in the app -- it fetches item data, displays match/confidence badges (from MatchBadge and ConfidenceBadge components), impact metric rows, materials breakdown, disposal guidance, sources list, and a save-item mutation. MetricDetailScreen drills into a single metric's methodology and data source.",
+      "nodeIds": [
+        "file:src/screens/ItemDetailScreen.tsx",
+        "file:src/screens/BarcodeScannerScreen.tsx",
+        "file:src/screens/NoMatchScreen.tsx",
+        "file:src/components/item/ResultCard.tsx",
+        "file:src/components/metrics/MetricRow.tsx"
+      ]
+    },
+    {
+      "order": 9,
+      "title": "Restaurant Types and API",
+      "description": "The restaurant feature has its own type system. src/types/restaurant.ts defines food carbon impact types, material sustainability scan types, and the Sparks gamification types, plus a buildCarbonEquivalents utility that converts kg CO2e into relatable comparisons (miles driven, phone charges, tree absorption days). restaurantLookup.ts provides the client-side API functions: scanFoodPhoto, scanMaterial, searchMenuItem, and fetchSparksSummary. This parallel type/API structure mirrors the product lookup feature but targets the restaurant sustainability domain.",
+      "nodeIds": [
+        "file:src/types/restaurant.ts",
+        "file:src/api/restaurantLookup.ts"
+      ]
+    },
+    {
+      "order": 10,
+      "title": "Restaurant Hooks and Components",
+      "description": "Building on the restaurant types from Step 9, useRestaurantScan.ts provides three TanStack Query hooks (useFoodPhotoScan, useMaterialScan, useMenuSearch) that handle the scan-and-reward flow, automatically syncing earned Sparks to a Zustand store on success. useSparks.ts manages the gamification state with a dual-layer approach: a Zustand store for instant local badge count reads, and a TanStack Query hook for server synchronization. The restaurant components -- FoodImpactCard, MaterialImpactCard, and SparksBadge -- render the rich impact data and gamification UI.",
+      "nodeIds": [
+        "file:src/hooks/useRestaurantScan.ts",
+        "file:src/hooks/useSparks.ts",
+        "file:src/components/restaurant/FoodImpactCard.tsx",
+        "file:src/components/restaurant/SparksBadge.tsx"
+      ],
+      "languageLesson": "This dual-state pattern (Zustand for synchronous UI reads, TanStack Query for async server sync) avoids the flickering that happens when badge counts depend solely on async fetches. The Zustand store is hydrated on fetch success, giving components instant access."
+    },
+    {
+      "order": 11,
+      "title": "Voice Chat Feature",
+      "description": "The voice chat feature demonstrates a multi-service integration pipeline. useVoiceChat.ts implements a state machine that records audio via expo-av, transcribes it via whisper.ts (OpenAI Whisper API), sends the transcript with user scan history context to claude.ts (Anthropic Claude Haiku with sustainability-focused system instructions), and speaks the response aloud using expo-speech. VoiceAskScreen.tsx renders a chat bubble UI with user/assistant/error messages and text input controls. This is the most complex hook in the app, orchestrating four external services in sequence.",
+      "nodeIds": [
+        "file:src/hooks/useVoiceChat.ts",
+        "file:src/screens/VoiceAskScreen.tsx",
+        "file:src/api/claude.ts",
+        "file:src/api/whisper.ts"
+      ]
+    },
+    {
+      "order": 12,
+      "title": "Server Controllers",
+      "description": "Shifting to the backend, the server uses an Express controller factory pattern. lookup.ts's createLookupController instantiates all restaurant services (Vision, FoodEmission, MaterialImpact, Sparks, USDA, Climatiq) and returns a handler supporting image lookup for food and material pipelines. search.ts's createSearchController extends product search with a 'food' mode that queries the food emission table with optional USDA enrichment. Both controllers use server/types/restaurant.ts for shared request/response types and the buildCarbonEquivalents utility.",
+      "nodeIds": [
+        "file:server/controllers/lookup.ts",
+        "file:server/controllers/search.ts",
+        "file:server/types/restaurant.ts"
+      ]
+    },
+    {
+      "order": 13,
+      "title": "Server Service Pipeline",
+      "description": "The server services implement a multi-strategy data resolution pipeline. VisionService wraps Google Cloud Vision API to identify food items and materials from photos. FoodEmissionService uses a four-stage lookup chain (exact match, alias containment, pg_trgm fuzzy matching, category fallback) against PostgreSQL. UsdaService optionally enriches results with nutritional data from USDA FoodData Central. ClimatiqService acts as a last-resort estimator using Climatiq's EXIOBASE IO tables. MaterialImpactService mirrors the food service's multi-strategy approach for disposable restaurant materials. SparksService implements the gamification reward system with transactional persistence.",
+      "nodeIds": [
+        "file:server/services/restaurant/visionService.ts",
+        "file:server/services/restaurant/foodEmissionService.ts",
+        "file:server/services/restaurant/climatiqService.ts",
+        "file:server/services/restaurant/usdaService.ts",
+        "file:server/services/restaurant/sparksService.ts"
+      ]
+    },
+    {
+      "order": 14,
+      "title": "Seed Data and Dev Tooling",
+      "description": "The database seed files contain the reference environmental data that powers the app. food_emission_factors.ts has farm-to-fork CO2e emission factors per kg for approximately 50 food categories sourced from Agribalyse, IPCC, and Poore & Nemecek. material_impacts.ts has lifecycle impact data for disposable restaurant materials. mock-api-server.js provides a standalone HTTP server that simulates the entire Green Life REST API with hardcoded data, enabling frontend development without the real backend. Together, these files make the app self-contained for development and testing.",
+      "nodeIds": [
+        "file:server/db/seeds/food_emission_factors.ts",
+        "file:server/db/seeds/material_impacts.ts",
+        "file:mock-api-server.js"
+      ]
+    }
+  ]
+}
