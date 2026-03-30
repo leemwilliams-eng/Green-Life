@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Green Life",
+    "slug": "greenlife",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#0E1A0F"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.edelleye.greenlife",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Green Life uses your microphone to let you ask questions by voice."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0E1A0F"
+      },
+      "package": "com.edelleye.greenlife",
+      "permissions": ["android.permission.RECORD_AUDIO"]
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Green Life uses your microphone to let you ask questions by voice."
+        }
+      ]
+    ]
+  }
+}
