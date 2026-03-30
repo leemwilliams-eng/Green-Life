@@ -6,19 +6,33 @@ import { AuthScreen } from "@/screens/AuthScreen";
 import { BarcodeScannerScreen } from "@/screens/BarcodeScannerScreen";
 import { CandidateResultsScreen } from "@/screens/CandidateResultsScreen";
 import { ItemDetailScreen } from "@/screens/ItemDetailScreen";
+import { LoginScreen } from "@/screens/LoginScreen";
 import { MetricDetailScreen } from "@/screens/MetricDetailScreen";
 import { NoMatchScreen } from "@/screens/NoMatchScreen";
 import { OnboardingScreen } from "@/screens/OnboardingScreen";
 import { PermissionsScreen } from "@/screens/PermissionsScreen";
 import { PhotoCaptureScreen } from "@/screens/PhotoCaptureScreen";
 import { SourceDetailScreen } from "@/screens/SourceDetailScreen";
+import { SplashScreen } from "@/screens/SplashScreen";
 import { VoiceAskScreen } from "@/screens/VoiceAskScreen";
+import { colors } from "@/theme";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function RootNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Onboarding">
+    <Stack.Navigator
+      initialRouteName="Splash"
+      screenOptions={{
+        animation: "fade",
+        contentStyle: { backgroundColor: colors.bg },
+        headerStyle: { backgroundColor: colors.surface },
+        headerTintColor: colors.text,
+        headerTitleStyle: { color: colors.text },
+      }}
+    >
+      <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Permissions" component={PermissionsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Auth" component={AuthScreen} options={{ title: "Account" }} />

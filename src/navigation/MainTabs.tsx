@@ -2,9 +2,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 
 import type { MainTabParamList } from "@/navigation/types";
+import { SparksFeedScreen } from "@/screens/SparksFeedScreen";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { ProfileScreen } from "@/screens/ProfileScreen";
-import { SavedScreen } from "@/screens/SavedScreen";
+import { ScanHubScreen } from "@/screens/ScanHubScreen";
 import { SearchScreen } from "@/screens/SearchScreen";
 import { colors } from "@/theme";
 
@@ -19,11 +20,12 @@ export function MainTabs() {
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
         tabBarStyle: {
-          backgroundColor: "transparent",
-          borderTopWidth: 0,
-          elevation: 0,
-          shadowOpacity: 0,
-          position: "absolute"
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
+          borderTopWidth: 1
+        },
+        tabBarLabelStyle: {
+          fontSize: 12
         }
       }}
     >
@@ -38,9 +40,14 @@ export function MainTabs() {
         options={{ tabBarIcon: ({ color }) => <Feather name="search" size={22} color={color} /> }}
       />
       <Tab.Screen
-        name="Saved"
-        component={SavedScreen}
-        options={{ tabBarIcon: ({ color }) => <Feather name="bookmark" size={22} color={color} /> }}
+        name="Scan"
+        component={ScanHubScreen}
+        options={{ tabBarIcon: ({ color }) => <Feather name="camera" size={22} color={color} /> }}
+      />
+      <Tab.Screen
+        name="Community"
+        component={SparksFeedScreen}
+        options={{ tabBarIcon: ({ color }) => <Feather name="users" size={22} color={color} /> }}
       />
       <Tab.Screen
         name="Profile"

@@ -12,7 +12,12 @@ interface PrimaryButtonProps {
 export function PrimaryButton({ label, onPress, size = "default", variant = "default" }: PrimaryButtonProps) {
   return (
     <Pressable
-      style={[styles.button, size === "compact" ? styles.buttonCompact : null, variant === "inverted" ? styles.buttonInverted : null]}
+      style={({ pressed }) => [
+        styles.button,
+        size === "compact" ? styles.buttonCompact : null,
+        variant === "inverted" ? styles.buttonInverted : null,
+        pressed ? (variant === "inverted" ? styles.buttonInvertedPressed : styles.buttonPressed) : null,
+      ]}
       onPress={onPress}
     >
       <Text style={[styles.label, size === "compact" ? styles.labelCompact : null, variant === "inverted" ? styles.labelInverted : null]}>
@@ -28,25 +33,31 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: radius.lg,
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md
+    paddingVertical: spacing.md,
   },
   buttonCompact: {
     paddingHorizontal: spacing.xl,
-    paddingVertical: spacing.sm
+    paddingVertical: spacing.sm,
   },
   buttonInverted: {
     backgroundColor: colors.bg,
   },
+  buttonPressed: {
+    backgroundColor: colors.primaryStrong,
+  },
+  buttonInvertedPressed: {
+    backgroundColor: colors.surface,
+  },
   label: {
     ...typography.label,
-    color: colors.surface
+    color: colors.surface,
   },
   labelCompact: {
     fontSize: 14,
     fontWeight: "400",
-    lineHeight: 18
+    lineHeight: 18,
   },
   labelInverted: {
     color: colors.primary,
-  }
+  },
 });

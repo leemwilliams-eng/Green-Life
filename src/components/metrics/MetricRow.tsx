@@ -1,6 +1,7 @@
-﻿import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { colors, spacing, typography } from "@/theme";
+import { colors, spacing, typography, withAlpha } from "@/theme";
 import type { ImpactMetric } from "@/types/domain";
 
 interface MetricRowProps {
@@ -11,19 +12,22 @@ interface MetricRowProps {
 export function MetricRow({ metric, onPress }: MetricRowProps) {
   const content = (
     <>
-      <View>
+      <View style={styles.metaWrap}>
         <Text style={styles.label}>{metric.label}</Text>
         <Text style={styles.meta}>{metric.estimate_type}</Text>
       </View>
-      <Text style={styles.value}>
-        {metric.value ?? "N/A"} {metric.unit ?? ""}
-      </Text>
+      <View style={styles.valueWrap}>
+        <Text style={styles.value}>
+          {metric.value ?? "N/A"} {metric.unit ?? ""}
+        </Text>
+        {onPress ? <Feather name="chevron-right" size={18} color={colors.textMuted} /> : null}
+      </View>
     </>
   );
 
   if (onPress) {
     return (
-      <Pressable style={styles.row} onPress={onPress}>
+      <Pressable style={({ pressed }) => [styles.row, pressed ? styles.rowPressed : null]} onPress={onPress}>
         {content}
       </Pressable>
     );
@@ -41,6 +45,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: spacing.md
   },
+  rowPressed: {
+    backgroundColor: withAlpha(colors.primary, 0.08),
+    borderRadius: spacing.md
+  },
+  metaWrap: {
+    flex: 1,
+    gap: spacing.xs
+  },
   label: {
     ...typography.label
   },
@@ -48,10 +60,16 @@ const styles = StyleSheet.create({
     ...typography.caption,
     textTransform: "capitalize"
   },
+  valueWrap: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexShrink: 1,
+    gap: spacing.xs,
+    paddingLeft: spacing.md
+  },
   value: {
     ...typography.body,
     flexShrink: 1,
-    paddingLeft: spacing.md,
     textAlign: "right"
   }
 });

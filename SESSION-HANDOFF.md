@@ -2,20 +2,26 @@
 
 ## Project
 
-Green Life — React Native mobile app for scanning/searching products and returning source-backed environmental impact data.
+Green Life - Expo / React Native application for helping users understand the environmental and trust implications of the world around them.
 
 Workspace: `C:\Users\leew\OneDrive\Documents\Playground\green-life`
 
 ---
 
-## Important: Project Structure
+## Important: Current Runtime Structure
 
-The **running app** uses root-level directories only:
-- `screens/` — all active screens
-- `navigation/AppNavigator.tsx` — navigation root
-- `App.tsx` → `index.js` → `navigation/AppNavigator.tsx`
+The active app runtime now lives in the `src/` layer.
 
-The `src/` directory is a disconnected parallel structure — Metro does **not** load it. Do not edit files in `src/` expecting them to appear in the app.
+Primary entry path:
+
+- `App.tsx`
+- `src/navigation/RootNavigator.tsx`
+- `src/navigation/MainTabs.tsx`
+- `src/screens/*`
+
+The older root-level `screens/` and `navigation/` directories are no longer the active product surface and should not be treated as the source of truth for the current UI direction.
+
+There is also a duplicate `src/src/` tree on disk that should be treated as legacy material, not the active runtime.
 
 ---
 
@@ -25,111 +31,168 @@ The `src/` directory is a disconnected parallel structure — Metro does **not**
 - React Native 0.81.5
 - React 19.1.0
 - TypeScript
-- React Navigation (native stack + bottom tabs)
-- Ionicons (`@expo/vector-icons`)
+- React Navigation
+- TanStack Query
+- Zustand
 - expo-av, expo-speech, expo-camera, expo-image-picker
 - react-native-safe-area-context
 
 ---
 
-## Current State (as of 2026-03-29)
+## Current State
 
-All screens running on device with mock/placeholder data. Voice Ask feature live.
+### Product Direction
 
-### Screens
+The app has been actively migrated toward the newer Green Life design system and brand language.
 
-| Screen | File | Status |
-|--------|------|--------|
-| Splash | `screens/SplashScreen.tsx` | Done |
-| Login | `screens/LoginScreen.tsx` | Done |
-| Home | `screens/HomeScreen.tsx` | Done |
-| Search | `screens/SearchScreen.tsx` | Done — mic icon in search bar opens Voice Ask |
-| Scan | `screens/ScanScreen.tsx` | Done — Food / Material / Barcode modes |
-| Result | `screens/ResultScreen.tsx` | Done — all 3 data shapes (food, material, product) |
-| Community | `screens/CommunityScreen.tsx` | Done |
-| Profile | `screens/ProfileScreen.tsx` | Done |
-| Voice Ask | `screens/VoiceAskScreen.tsx` | Done — text → Claude API → expo-speech TTS |
+The design system is now being treated as the authoritative direction for:
 
-### Navigation
+- typography
+- spacing
+- surfaces and card rhythm
+- brand footer treatment
+- badges and trust states
+- higher-level platform portability
 
-- `navigation/AppNavigator.tsx` — root stack: Splash → Login → MainTabs → Result → VoiceAsk
-- Bottom tabs: Home, Search, Scan, Community, Profile
-- VoiceAsk opens as modal (`slide_from_bottom`) from mic icon in Search bar
+### Active UI Status
 
-### Voice Ask
+The active runtime now reflects the tokenized `src/` implementation across:
 
-- Entry: mic icon (gold circle) in Search screen search bar
-- Flow: type question → Claude API (claude-haiku-4-5-20251001) → spoken response via expo-speech
-- No OpenAI / Whisper dependency — removed. Only `EXPO_PUBLIC_ANTHROPIC_API_KEY` needed.
-- Needs Anthropic account credits to function (console.anthropic.com → Billing)
+- Splash
+- Login
+- Home
+- Search
+- Scan
+- Community
+- Profile
+- onboarding and permissions
+- candidate results
+- item detail
+- metric detail
+- source detail
+- no match
+- voice ask
+- barcode and photo capture flows
 
-### Design System
+The Community screen now includes a bottom horizontal placeholder rail for future panels such as Share, Rankings, Nearby, and Featured.
 
-- `DESIGN.md` — full design contract, source of truth
-- Design system reference: https://v0-design-system-eta-jade.vercel.app/
-- Dark Forest palette: `#0E1A0F` bg, `#4A9B5F` green, `#C8A96E` gold
-- Plus Jakarta Sans (self-hosted: Light, Regular, Medium, SemiBold)
-- Icons: Ionicons (`@expo/vector-icons`)
+The Splash screen has also been updated to better match the new Green Life brand voice, including:
+
+- centered hero copy
+- updated headline and subhead
+- quote card rebalanced vertically
+- footer and prompt spacing cleaned up
+
+### Shared UI Work Completed
+
+Notable alignment work includes:
+
+- shared surface/card primitives
+- consistent brand footer usage across tab screens
+- cleaned tab bar behavior and bottom spacing
+- updated badges, buttons, search bar, cards, and detail rows
+- stronger visual rhythm across primary and secondary screens
+
+---
+
+## Testing Workflow
+
+The current testing model is:
+
+### Phone
+
+Use Expo Go.
+
+Commands:
+
+```powershell
+npm run start
+```
+
+or
+
+```powershell
+npm run start:go
+```
+
+### Android Emulator
+
+Use the installed native `Green Life` app, not Expo Go.
+
+Commands:
+
+```powershell
+npm run start:native
+```
+
+Then launch the installed `Green Life` app on the emulator.
+
+If the native app needs to be rebuilt or reinstalled:
+
+```powershell
+npm run android
+```
+
+### Important Notes
+
+- `npm run android` now sets `JAVA_HOME` to the Android Studio JBR in `package.json`
+- the emulator may show an Android compatibility warning about 16 KB page support; this is platform-side noise and can be dismissed
+- Metro can still open Expo Go if the wrong command is used, so keep phone and emulator flows separate
 
 ---
 
 ## Environment Variables
 
-```
-# Required for Voice Ask
-EXPO_PUBLIC_ANTHROPIC_API_KEY=sk-ant-...
+Current env expectations include:
 
-# No longer needed — Whisper removed
-# EXPO_PUBLIC_OPENAI_API_KEY=...
-
-# For live backend (not yet deployed)
-EXPO_PUBLIC_USE_MOCK_API=false
-EXPO_PUBLIC_API_BASE_URL=https://your-api.render.com/api/v1
+```powershell
+EXPO_PUBLIC_ANTHROPIC_API_KEY=...
+EXPO_PUBLIC_API_BASE_URL=...
 ```
+
+The app still supports mock behavior where applicable, but ongoing work is increasingly oriented toward real backend/API integration.
 
 ---
 
-## Run Instructions
+## Documentation Added or Updated
 
-```powershell
-npm.cmd start
-```
+The product and platform direction has been captured in:
 
-If you see unexpected behavior that doesn't match recent changes, clear Metro cache:
+- `docs/product/Platform-Roadmap.md`
+- `docs/product/Founder-Platform-Brief.md`
+- `docs/product/Execution-Compass.md`
+- `docs/product/Engineering-Backlog.md`
 
-```powershell
-npx expo start --clear
-```
+These documents now tie the design-system work, platform direction, trust-layer framing, and execution backlog together.
 
 ---
 
-## Next Steps (Priority Order)
+## Recommended Next Priorities
 
-1. **Deploy backend API** — Render or Railway. Primary blocker for all live data below.
-   - Backend scaffolded in `server/`
-   - DB migrations 001, 002, 003 ready to run
-   - Service specs written: `visionService`, `foodEmissionService`, `materialImpactService`, `sparksService`, `usdaService`, `climatiqService`
+1. Continue polish on active high-traffic screens while preserving design-system consistency.
+2. Keep reducing drift between the active runtime and any dormant legacy UI paths.
+3. Harden backend and API contracts around the real product model.
+4. Define the trust layer explicitly: badges, provenance, confidence, methodology, and community signal.
+5. Identify the first portable web-ready product flows.
+6. Prepare the platform for future service and agent-oriented interfaces.
 
-2. **Wire authentication** — Supabase Auth recommended. Guest login path already set up in Onboarding.
+---
 
-3. **Run DB migrations** — run 001, 002, 003 in order after deploy. Then add Google Vision API key.
+## Git Status Guidance
 
-4. **Wire Scan → Result (photo flow)** — food and material image lookup via visionService + emission services.
+As of this handoff, the recent design-system migration and platform-documentation work exists locally and should be reviewed, committed, and pushed intentionally rather than assumed to be published.
 
-5. **Wire Scan → Result (barcode + text search)** — barcode lookup and text search flows.
+Recommended publish path:
 
-6. **Wire Profile** — real user stats + sign out.
-
-7. **Wire Community / Sparks feed** — live leaderboard and Sparks feed.
-
-8. **Guest login / freemium path** — Onboarding already sets this up naturally.
-
-9. **Design system audit** — run after integration to catch any screens that diverged from DESIGN.md.
+1. create a checkpoint branch
+2. commit current design-system and documentation work
+3. push to GitHub
+4. open a draft PR for review and continuity
 
 ---
 
 ## Behavior Notes
 
-- App defaults to placeholder data. Set `EXPO_PUBLIC_USE_MOCK_API=false` + `EXPO_PUBLIC_API_BASE_URL` to use live backend.
-- Metro cache issues are common after multiple rapid edits — `npx expo start --clear` fixes them.
-- `src/` directory exists but is not loaded by Metro. All active code is at the project root.
+- The app is now much closer to the intended Green Life design language and product voice.
+- The current work should be understood as platform-shaping, not only UI refinement.
+- Future work should continue to favor reusable system decisions over one-off screen exceptions.

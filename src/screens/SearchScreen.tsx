@@ -13,8 +13,9 @@ import { ErrorState } from "@/components/ui/ErrorState";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { Screen } from "@/components/ui/Screen";
 import { SearchBar } from "@/components/ui/SearchBar";
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import type { MainTabParamList, RootStackParamList } from "@/navigation/types";
-import { colors, radius, spacing, typography } from "@/theme";
+import { colors, spacing, typography, withAlpha } from "@/theme";
 
 type Props = BottomTabScreenProps<MainTabParamList, "Search">;
 const chips = ["Drinkware", "Cleaning", "Packaging", "Appliances"];
@@ -32,21 +33,21 @@ export function SearchScreen({}: Props) {
 
   const headline = useMemo(() => {
     if (trimmedQuery.length < 2) return "Start with a product, brand, or material.";
-    return `Results for \"${trimmedQuery}\"`;
+    return `Results for "${trimmedQuery}"`;
   }, [trimmedQuery]);
 
   return (
-    <Screen>
+    <Screen includeBottomInset={false}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.headerCard}>
+        <SurfaceCard style={styles.headerCard}>
           <Text style={typography.h1}>Search</Text>
           <Text style={styles.subhead}>{headline}</Text>
           <SearchBar value={query} onChangeText={setQuery} onMicPress={() => stackNavigation.navigate("VoiceAsk", {})} />
-        </View>
+        </SurfaceCard>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
           {chips.map((chip) => (
-            <Pressable key={chip} style={styles.chip} onPress={() => setQuery(chip)}>
+            <Pressable key={chip} style={({ pressed }) => [styles.chip, pressed ? styles.chipPressed : null]} onPress={() => setQuery(chip)}>
               <Text style={styles.chipLabel}>{chip}</Text>
             </Pressable>
           ))}
@@ -74,16 +75,10 @@ export function SearchScreen({}: Props) {
 
 const styles = StyleSheet.create({
   content: {
-    gap: spacing.lg,
-    paddingBottom: spacing.xl
+    gap: spacing.lg
   },
   headerCard: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.xl,
-    borderWidth: 1,
-    gap: spacing.md,
-    padding: spacing.xl
+    gap: spacing.md
   },
   subhead: {
     ...typography.bodySmall
@@ -92,10 +87,15 @@ const styles = StyleSheet.create({
     gap: spacing.sm
   },
   chip: {
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.pill,
+    backgroundColor: withAlpha(colors.primary, 0.1),
+    borderColor: withAlpha(colors.primary, 0.2),
+    borderRadius: 999,
+    borderWidth: 1,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm
+  },
+  chipPressed: {
+    backgroundColor: withAlpha(colors.primary, 0.18)
   },
   chipLabel: {
     ...typography.caption,
@@ -106,9 +106,6 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop: spacing.md,
-    marginBottom: 20
+    marginBottom: spacing.sm
   }
 });
-
-
-

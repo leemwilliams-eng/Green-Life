@@ -8,22 +8,21 @@ import { ErrorState } from "@/components/ui/ErrorState";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { Screen } from "@/components/ui/Screen";
 import { StatCard } from "@/components/ui/StatCard";
-import { colors, radius, spacing, typography } from "@/theme";
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
+import { colors, spacing, typography } from "@/theme";
 
 export function ProfileScreen() {
   const profileQuery = useQuery({ queryKey: ["profile"], queryFn: getProfile });
 
   return (
-    <Screen>
+    <Screen includeBottomInset={false}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.accountCard}>
+        <SurfaceCard tone="tint" style={styles.accountCard}>
           <Text style={styles.eyebrow}>Account</Text>
           <View style={styles.profileRow}>
             <View style={styles.avatarFrame}>
               {profileQuery.isSuccess && profileQuery.data.data.email ? (
-                <Text style={styles.avatarInitial}>
-                  {profileQuery.data.data.email[0].toUpperCase()}
-                </Text>
+                <Text style={styles.avatarInitial}>{profileQuery.data.data.email[0].toUpperCase()}</Text>
               ) : (
                 <Text style={styles.avatarInitial}>?</Text>
               )}
@@ -32,9 +31,7 @@ export function ProfileScreen() {
               <Text style={typography.h1}>Profile</Text>
               {profileQuery.isLoading && <LoadingState />}
               {profileQuery.isError && <ErrorState message="Profile is unavailable. This is expected until auth is connected." />}
-              {profileQuery.isSuccess && (
-                <Text style={styles.email}>{profileQuery.data.data.email}</Text>
-              )}
+              {profileQuery.isSuccess && <Text style={styles.email}>{profileQuery.data.data.email}</Text>}
             </View>
           </View>
           {profileQuery.isSuccess && (
@@ -43,7 +40,7 @@ export function ProfileScreen() {
               <ConfidenceBadge score={0.88} />
             </>
           )}
-        </View>
+        </SurfaceCard>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.statsRow}>
           <StatCard label="Data mode" value="Mock API active" tone="tint" />
@@ -51,15 +48,15 @@ export function ProfileScreen() {
           <StatCard label="Primary datasets" value="EPA, EPD" />
         </ScrollView>
 
-        <View style={styles.panel}>
+        <SurfaceCard style={styles.panel}>
           <Text style={styles.panelTitle}>About confidence labels</Text>
           <Text style={styles.body}>Exact matches mean the app linked to a specific known product record. Estimates mean the result was derived from category or material data.</Text>
-        </View>
+        </SurfaceCard>
 
-        <View style={styles.panel}>
+        <SurfaceCard style={styles.panel}>
           <Text style={styles.panelTitle}>Next settings</Text>
           <Text style={styles.body}>Permissions, account linking, privacy controls, and saved history preferences belong in this section.</Text>
-        </View>
+        </SurfaceCard>
 
         <BrandFooter style={styles.footer} />
       </ScrollView>
@@ -69,14 +66,10 @@ export function ProfileScreen() {
 
 const styles = StyleSheet.create({
   content: {
-    gap: spacing.lg,
-    paddingBottom: spacing.xl
+    gap: spacing.lg
   },
   accountCard: {
-    backgroundColor: colors.surfaceTint,
-    borderRadius: radius.xl,
-    gap: spacing.md,
-    padding: spacing.xl
+    gap: spacing.md
   },
   eyebrow: {
     ...typography.caption,
@@ -118,21 +111,13 @@ const styles = StyleSheet.create({
     gap: spacing.md
   },
   panel: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.xl,
-    borderWidth: 1,
-    gap: spacing.sm,
-    padding: spacing.xl
+    gap: spacing.sm
   },
   panelTitle: {
     ...typography.title
   },
   footer: {
     marginTop: spacing.md,
-    marginBottom: 20
+    marginBottom: spacing.sm
   }
 });
-
-
-
