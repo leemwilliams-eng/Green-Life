@@ -1,15 +1,56 @@
 ## Design System
-DESIGN.md is the bible for all visual and UI decisions. Always read it first.
-Primary source: https://v0-design-system-eta-jade.vercel.app/
-GitHub: https://github.com/leemwilliams-eng/greenlife-design-system
 
-Rules:
-- Never use Bold (700) for display or h1 — the design system specifies Light (300)
-- Icons are Lucide React only — no other icon libraries
-- Always use the defined spacing tokens — never arbitrary pixel values
-- Badge variants (Exact Match, Probable, Estimate, Material) are a core product pattern
-- Do not deviate from any of the above without explicit user approval
-- In QA mode, flag any code that doesn't match DESIGN.md
+**Primary source:** https://v0-design-system-eta-jade.vercel.app/
+**GitHub:** https://github.com/leemwilliams-eng/greenlife-design-system
+**Local bible:** DESIGN.md — read it first before any UI work.
+
+The design system was built in parallel with the app using the same guidance. It is the
+authoritative reference for all visual decisions. The app references it by convention (not
+as a published npm package). Do not deviate without explicit user approval.
+
+### Icons
+- **Lucide React Native exclusively** — no Ionicons, no Feather, no other libraries
+- Sizes: xs=12, sm=16, md=20, lg=24 (default), xl=32
+
+### Typography (Plus Jakarta Sans)
+- Display/H1: Light (300), 32px
+- H2: Regular (400), 20px
+- H3/Title: Medium (500), 18px
+- Body: Regular (400), 16px
+- Label: SemiBold (600), 14px
+- Caption: Medium (500), 12px
+- **Never use Bold (700) for display or H1**
+
+### Colors
+- Background: `#0D1F12` (Forest)
+- Surface elevated: `#132B1A`
+- Text primary: `#F0FDF4`
+- Text muted: `#86EFAC`
+- Primary action: `#10B981` (Emerald 500), pressed: `#059669`
+- Gold/Spark accent: `#F59E0B` (Amber 400) — reserved for emphasis only
+- Danger: `#F87171`
+- Info: `#38BDF8`
+
+### Spacing (4pt base grid)
+xs=4, sm=8, md=12, lg=16, xl=24, xxl=32, xxxl=40, xxxxl=48, xxxxxl=64
+Screen horizontal padding: 32px (xxl). Never use arbitrary pixel values.
+
+### Border Radius
+sm=8, md=12, lg=16, xl=24, pill=999
+
+### Badge variants (core product pattern)
+Exact Match (emerald tint), Probable (blue tint), Estimate (amber tint), Material (muted)
+
+### Motion
+- Micro: 80–100ms ease-out (button press)
+- Short: 150–200ms (modals)
+- Medium: 250–350ms (tab switches)
+- Long: 400–600ms (onboarding)
+
+### Current app / design system gaps to close before launch
+- App uses Ionicons — should migrate to Lucide React Native
+- App uses `#2F6B3B`/`#4A9B5F` greens — design system primary is `#10B981`
+- Spacing is partially hardcoded — should use token values
 
 ## Workflow Orchestration
 
