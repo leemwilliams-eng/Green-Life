@@ -33,23 +33,23 @@ export function HomeScreen({ navigation }: Props) {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <SurfaceCard tone="tint" style={styles.hero}>
           <Text style={styles.eyebrow}>Green Life</Text>
-          <Text style={typography.display}>Measure the footprint around you.</Text>
+          <Text style={typography.display}>Look around you. What do you see?</Text>
           <Text style={styles.heroBody}>
-            Scan a product, review impact metrics, and keep source-backed results in one place.
+            Lookup an item, see the profile, and keep common items in one place.
           </Text>
-          <SearchBar value={searchText} placeholder="Search food and products" onChangeText={setSearchText} />
+          <SearchBar value={searchText} placeholder="Search food and materials" onChangeText={setSearchText} />
         </SurfaceCard>
 
         <View style={styles.actionsRow}>
           <SurfaceCard tone="primary" style={styles.actionCardPrimary}>
-            <Text style={styles.actionTitlePrimary}>Quick scan</Text>
-            <Text style={styles.actionBodyPrimary}>Barcode is the fastest path to an exact product match with full data provenance.</Text>
-            <PrimaryButton variant="inverted" label="Scan Barcode" onPress={() => stackNavigation.navigate("BarcodeScanner")} />
+            <Text style={styles.actionTitlePrimary}>Take a photo</Text>
+            <Text style={styles.actionBodyPrimary}>Capture an image, including meals and items on your table, and see the profile.</Text>
+            <PrimaryButton variant="inverted" label="Take Photo" onPress={() => stackNavigation.navigate("PhotoCapture")} />
           </SurfaceCard>
           <SurfaceCard style={styles.actionCardSecondary}>
-            <Text style={styles.actionTitleSecondary}>No barcode?</Text>
-            <Text style={styles.actionBodySecondary}>Capture a label or object and narrow it down with image lookup.</Text>
-            <SecondaryButton variant="accent" label="Take Photo" onPress={() => stackNavigation.navigate("PhotoCapture")} />
+            <Text style={styles.actionTitleSecondary}>Quick scan</Text>
+            <Text style={styles.actionBodySecondary}>QR or barcode is the best way to get food profiles, and match with source backed details.</Text>
+            <SecondaryButton variant="accent" label="Scan Barcode" onPress={() => stackNavigation.navigate("BarcodeScanner")} />
           </SurfaceCard>
           <SecondaryButton variant="ghost" fullWidth label="Browse Search" onPress={() => navigation.navigate("Search")} />
         </View>

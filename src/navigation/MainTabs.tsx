@@ -5,7 +5,7 @@ import type { MainTabParamList } from "@/navigation/types";
 import { SparksFeedScreen } from "@/screens/SparksFeedScreen";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { ProfileScreen } from "@/screens/ProfileScreen";
-import { ScanHubScreen } from "@/screens/ScanHubScreen";
+import { CaptureScreen } from "@/screens/CaptureScreen";
 import { SearchScreen } from "@/screens/SearchScreen";
 import { colors } from "@/theme";
 
@@ -40,8 +40,8 @@ export function MainTabs() {
         options={{ tabBarIcon: ({ color }) => <Feather name="search" size={22} color={color} /> }}
       />
       <Tab.Screen
-        name="Scan"
-        component={ScanHubScreen}
+        name="Capture"
+        component={CaptureScreen}
         options={{ tabBarIcon: ({ color }) => <Feather name="camera" size={22} color={color} /> }}
       />
       <Tab.Screen

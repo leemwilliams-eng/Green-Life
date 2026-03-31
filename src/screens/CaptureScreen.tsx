@@ -11,35 +11,35 @@ import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import type { RootStackParamList } from "@/navigation/types";
 import { colors, spacing, typography } from "@/theme";
 
-export function ScanHubScreen() {
+export function CaptureScreen() {
   const stackNavigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
     <Screen includeBottomInset={false}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <SurfaceCard tone="tint" style={styles.heroCard}>
-          <Text style={styles.eyebrow}>Primary action</Text>
-          <Text style={typography.h1}>Point your phone at the world.</Text>
+          <Text style={styles.eyebrow}>What You See</Text>
+          <Text style={typography.h1}>Point your camera or device at what you see.</Text>
           <Text style={styles.body}>
-            Scan a barcode for the fastest exact match, or capture a photo when the label needs more context.
+            Use that photo or scan to lookup food and item profiles for additional details.
           </Text>
           <ConfidenceBadge score={0.96} />
         </SurfaceCard>
 
         <SurfaceCard style={styles.sectionCard}>
-          <Text style={styles.sectionTitle}>Fastest path</Text>
+          <Text style={styles.sectionTitle}>Take a photo</Text>
           <Text style={styles.body}>
-            Barcode lookup is still the strongest route for exact product matches and source-backed detail.
+            Capture an image, including meals and items on your table, and see the profile.
           </Text>
-          <PrimaryButton label="Scan Barcode" onPress={() => stackNavigation.navigate("BarcodeScanner")} />
+          <PrimaryButton label="Take Photo" onPress={() => stackNavigation.navigate("PhotoCapture")} />
         </SurfaceCard>
 
         <SurfaceCard style={styles.sectionCard}>
-          <Text style={styles.sectionTitle}>Need more context?</Text>
+          <Text style={styles.sectionTitle}>Quick scan</Text>
           <Text style={styles.body}>
-            Use a photo when the item has no barcode or when material and packaging cues matter more than SKU data.
+            QR or barcode is the best way to get food profiles, and match with source backed details.
           </Text>
-          <SecondaryButton variant="accent" label="Take Photo" onPress={() => stackNavigation.navigate("PhotoCapture")} />
+          <SecondaryButton variant="accent" label="Scan Barcode" onPress={() => stackNavigation.navigate("BarcodeScanner")} />
         </SurfaceCard>
 
         <BrandFooter style={styles.footer} />

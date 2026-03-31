@@ -147,7 +147,7 @@ export function SparksFeedScreen() {
   return (
     <Screen includeBottomInset={false}>
       <View style={styles.header}>
-        <Text style={styles.screenTitle}>Spark Feed</Text>
+        <Text style={styles.screenTitle}>Timeline</Text>
         <SparksBadge />
       </View>
 
@@ -175,7 +175,7 @@ export function SparksFeedScreen() {
             <View style={styles.communitySection}>
               <View style={styles.communityHeader}>
                 <Text style={styles.communityTitle}>Explore Community</Text>
-                <Text style={styles.communityMeta}>More ways in</Text>
+                <Text style={styles.communityMeta}>Options</Text>
               </View>
               <ScrollView
                 horizontal

@@ -32,7 +32,7 @@ export function SearchScreen({}: Props) {
   });
 
   const headline = useMemo(() => {
-    if (trimmedQuery.length < 2) return "Start with a product, brand, or material.";
+    if (trimmedQuery.length < 2) return "Start with a meal, food, or common items.";
     return `Results for "${trimmedQuery}"`;
   }, [trimmedQuery]);
 
@@ -42,7 +42,7 @@ export function SearchScreen({}: Props) {
         <SurfaceCard style={styles.headerCard}>
           <Text style={typography.h1}>Search</Text>
           <Text style={styles.subhead}>{headline}</Text>
-          <SearchBar value={query} onChangeText={setQuery} onMicPress={() => stackNavigation.navigate("VoiceAsk", {})} />
+          <SearchBar value={query} placeholder="Search food and materials" onChangeText={setQuery} onMicPress={() => stackNavigation.navigate("VoiceAsk", {})} />
         </SurfaceCard>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
@@ -53,7 +53,7 @@ export function SearchScreen({}: Props) {
           ))}
         </ScrollView>
 
-        {trimmedQuery.length < 2 && <EmptyState title="Start searching" message="Enter at least two characters to search products or materials." />}
+        {trimmedQuery.length < 2 && <EmptyState title="Start searching" message="Enter at least 2 characters to search food and materials already captured." />}
         {searchQuery.isLoading && <LoadingState />}
         {searchQuery.isError && <ErrorState message="Search failed. Confirm the API is reachable and try again." />}
         {searchQuery.isSuccess && searchQuery.data.data.results.length === 0 && (
