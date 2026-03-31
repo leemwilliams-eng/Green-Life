@@ -17,8 +17,9 @@ import { Screen } from "@/components/ui/Screen";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import { StatCard } from "@/components/ui/StatCard";
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import type { MainTabParamList, RootStackParamList } from "@/navigation/types";
-import { colors, radius, spacing, typography } from "@/theme";
+import { colors, spacing, typography, withAlpha } from "@/theme";
 
 type Props = BottomTabScreenProps<MainTabParamList, "Home">;
 
@@ -28,28 +29,28 @@ export function HomeScreen({ navigation }: Props) {
   const historyQuery = useQuery({ queryKey: ["history"], queryFn: getHistory });
 
   return (
-    <Screen>
+    <Screen includeBottomInset={false}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.hero}>
+        <SurfaceCard tone="tint" style={styles.hero}>
           <Text style={styles.eyebrow}>Green Life</Text>
           <Text style={typography.display}>Measure the footprint around you.</Text>
           <Text style={styles.heroBody}>
             Scan a product, review impact metrics, and keep source-backed results in one place.
           </Text>
           <SearchBar value={searchText} placeholder="Search food and products" onChangeText={setSearchText} />
-        </View>
+        </SurfaceCard>
 
         <View style={styles.actionsRow}>
-          <View style={styles.actionCardPrimary}>
+          <SurfaceCard tone="primary" style={styles.actionCardPrimary}>
             <Text style={styles.actionTitlePrimary}>Quick scan</Text>
             <Text style={styles.actionBodyPrimary}>Barcode is the fastest path to an exact product match with full data provenance.</Text>
             <PrimaryButton variant="inverted" label="Scan Barcode" onPress={() => stackNavigation.navigate("BarcodeScanner")} />
-          </View>
-          <View style={styles.actionCardSecondary}>
+          </SurfaceCard>
+          <SurfaceCard style={styles.actionCardSecondary}>
             <Text style={styles.actionTitleSecondary}>No barcode?</Text>
             <Text style={styles.actionBodySecondary}>Capture a label or object and narrow it down with image lookup.</Text>
             <SecondaryButton variant="accent" label="Take Photo" onPress={() => stackNavigation.navigate("PhotoCapture")} />
-          </View>
+          </SurfaceCard>
           <SecondaryButton variant="ghost" fullWidth label="Browse Search" onPress={() => navigation.navigate("Search")} />
         </View>
 
@@ -59,11 +60,11 @@ export function HomeScreen({ navigation }: Props) {
           <StatCard label="Primary sources" value="EPA + EPD" />
         </ScrollView>
 
-        <View style={styles.noticeCard}>
+        <SurfaceCard style={styles.noticeCard}>
           <Text style={styles.noticeTitle}>Trust the label, not the guesswork.</Text>
           <Text style={styles.noticeBody}>Every result shows whether it is exact, probable, or estimated, with source provenance attached.</Text>
           <ConfidenceBadge score={0.91} />
-        </View>
+        </SurfaceCard>
 
         <View style={styles.sectionHeader}>
           <Text style={typography.h2}>Recent activity</Text>
@@ -75,10 +76,13 @@ export function HomeScreen({ navigation }: Props) {
         {historyQuery.isSuccess && historyQuery.data.data.history.length === 0 && (
           <EmptyState title="No history yet" message="Your recent scans and searches will appear here." />
         )}
-        {historyQuery.isSuccess &&
-          historyQuery.data.data.history.slice(0, 3).map((entry) => (
-            <ResultCard key={entry.id} item={entry.item} onPress={() => stackNavigation.navigate("ItemDetail", { itemId: entry.item.id })} />
-          ))}
+        {historyQuery.isSuccess && (
+          <View style={styles.resultsWrap}>
+            {historyQuery.data.data.history.slice(0, 3).map((entry) => (
+              <ResultCard key={entry.id} item={entry.item} onPress={() => stackNavigation.navigate("ItemDetail", { itemId: entry.item.id })} />
+            ))}
+          </View>
+        )}
 
         <BrandFooter style={styles.footer} />
       </ScrollView>
@@ -88,14 +92,10 @@ export function HomeScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   content: {
-    gap: spacing.xl,
-    paddingBottom: spacing.xl
+    gap: spacing.xl
   },
   hero: {
-    backgroundColor: colors.surfaceTint,
-    borderRadius: radius.xl,
-    gap: spacing.md,
-    padding: spacing.xl
+    gap: spacing.md
   },
   eyebrow: {
     ...typography.caption,
@@ -110,18 +110,10 @@ const styles = StyleSheet.create({
     gap: spacing.lg
   },
   actionCardPrimary: {
-    backgroundColor: colors.primary,
-    borderRadius: radius.xl,
-    gap: spacing.md,
-    padding: spacing.xl
+    gap: spacing.md
   },
   actionCardSecondary: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.xl,
-    borderWidth: 1,
-    gap: spacing.md,
-    padding: spacing.xl
+    gap: spacing.md
   },
   actionTitlePrimary: {
     ...typography.title,
@@ -129,8 +121,7 @@ const styles = StyleSheet.create({
   },
   actionBodyPrimary: {
     ...typography.bodySmall,
-    color: colors.bg,
-    opacity: 0.75
+    color: withAlpha(colors.bg, 0.78)
   },
   actionTitleSecondary: {
     ...typography.title,
@@ -144,12 +135,7 @@ const styles = StyleSheet.create({
     gap: spacing.md
   },
   noticeCard: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.xl,
-    borderWidth: 1,
-    gap: spacing.md,
-    padding: spacing.xl
+    gap: spacing.md
   },
   noticeTitle: {
     ...typography.title
@@ -165,11 +151,11 @@ const styles = StyleSheet.create({
   sectionMeta: {
     ...typography.caption
   },
+  resultsWrap: {
+    gap: spacing.md
+  },
   footer: {
     marginTop: spacing.md,
-    marginBottom: 20
+    marginBottom: spacing.sm
   }
 });
-
-
-

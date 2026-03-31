@@ -1,6 +1,35 @@
-﻿{
+{
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
-  }
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
+  },
+  "include": [
+    "App.tsx",
+    "index.js",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": [
+    "android",
+    "node_modules",
+    "output",
+    "server",
+    "src/src",
+    "navigation",
+    "screens",
+    "screens/CommunityScreen.tsx",
+    "screens/HomeScreen.tsx",
+    "screens/HomeScreen_final.tsx",
+    "screens/ProfileScreen.tsx",
+    "screens/ResultScreen.tsx",
+    "screens/ScanScreen.tsx",
+    "screens/SearchScreen.tsx",
+    "screens/VoiceAskScreen.tsx"
+  ]
 }

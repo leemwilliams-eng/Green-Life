@@ -4,8 +4,9 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { BrandFooter } from "@/components/ui/BrandFooter";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import type { RootStackParamList } from "@/navigation/types";
-import { colors, typography } from "@/theme";
+import { colors, spacing, typography, withAlpha } from "@/theme";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Permissions">;
 
@@ -18,13 +19,14 @@ export function PermissionsScreen({ navigation }: Props) {
         imageStyle={styles.backgroundImage}
       >
         <SafeAreaView edges={["left", "right", "bottom"]} style={styles.safeArea}>
-          <View style={styles.footer}>
+          <SurfaceCard style={styles.footerCard}>
+            <Text style={styles.eyebrow}>Capture access</Text>
+            <Text style={styles.title}>Use your camera to scan the item or take a picture.</Text>
             <View style={styles.buttonWrap}>
-              <PrimaryButton label="View Item" onPress={() => navigation.replace("MainTabs")} />
+              <PrimaryButton label="Continue" onPress={() => navigation.replace("MainTabs")} />
             </View>
-            <Text style={styles.helperText}>{"Use your camera to scan the item\nor take a picture."}</Text>
             <BrandFooter />
-          </View>
+          </SurfaceCard>
         </SafeAreaView>
       </ImageBackground>
     </View>
@@ -33,37 +35,43 @@ export function PermissionsScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
     backgroundColor: colors.bg,
+    flex: 1
   },
   background: {
     flex: 1,
-    justifyContent: "flex-end",
+    justifyContent: "flex-end"
   },
   backgroundImage: {
-    resizeMode: "cover",
+    resizeMode: "cover"
   },
   safeArea: {
-    justifyContent: "flex-end",
+    justifyContent: "flex-end"
   },
-  footer: {
-    alignItems: "center",
-    // Dark glass overlay — forest background at 88% opacity
-    backgroundColor: "rgba(13, 31, 18, 0.88)",
-    justifyContent: "space-evenly",
+  footerCard: {
+    backgroundColor: withAlpha(colors.bg, 0.9),
+    borderColor: withAlpha(colors.primary, 0.2),
+    borderRadius: 0,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    gap: spacing.md,
     minHeight: 260,
     paddingHorizontal: 24,
-    gap: 16,
-    paddingVertical: 24,
+    paddingVertical: 24
   },
-  buttonWrap: {
-    minWidth: 156,
+  eyebrow: {
+    ...typography.caption,
+    color: colors.primaryStrong,
+    textTransform: "uppercase"
   },
-  helperText: {
+  title: {
     ...typography.body,
-    color: colors.textMuted,   // Soft emerald — readable on dark glass
+    color: colors.textMuted,
     fontSize: 18,
     lineHeight: 24,
-    textAlign: "center",
+    textAlign: "center"
   },
+  buttonWrap: {
+    minWidth: 156
+  }
 });

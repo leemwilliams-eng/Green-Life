@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View, type ViewStyle } from "react-native";
 
-import { colors, spacing } from "@/theme";
+import { colors, spacing, withAlpha } from "@/theme";
 
 interface BrandFooterProps {
   style?: ViewStyle;
@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
     width: 48,
   },
   label: {
-    // Design system: SemiBold reserved exclusively for "GREEN LIFE" brand name
     fontFamily: "PlusJakartaSans-SemiBold",
     color: colors.primary,
     fontSize: 14,
@@ -39,8 +38,7 @@ const styles = StyleSheet.create({
   },
   tagline: {
     fontFamily: "PlusJakartaSans-Regular",
-    // Emerald primary at 80% opacity — matches dark palette
-    color: "#10B98180",
+    color: withAlpha(colors.primary, 0.8),
     fontSize: 11,
     fontStyle: "italic",
     letterSpacing: 0.2,

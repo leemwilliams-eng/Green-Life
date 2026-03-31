@@ -1,4 +1,4 @@
-﻿import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { colors, radius, shadows, spacing, typography } from "@/theme";
 
@@ -21,18 +21,20 @@ const styles = StyleSheet.create({
   card: {
     ...shadows.card,
     backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: radius.lg,
+    borderWidth: 1,
     gap: spacing.xs,
     minWidth: 150,
-    padding: spacing.lg
+    padding: spacing.lg,
   },
   tint: {
-    backgroundColor: colors.surfaceTint
+    backgroundColor: colors.surfaceTint,
   },
   label: {
-    ...typography.caption
+    ...typography.caption,
   },
   value: {
-    ...typography.title
-  }
+    ...typography.title,
+  },
 });

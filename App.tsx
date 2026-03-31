@@ -1,7 +1,27 @@
-﻿import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, StatusBar, View } from 'react-native';
+import { DarkTheme, type Theme, NavigationContainer } from '@react-navigation/native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as Font from 'expo-font';
-import AppNavigator from './navigation/AppNavigator';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+import { RootNavigator } from './src/navigation/RootNavigator';
+import { colors } from './src/theme';
+
+const queryClient = new QueryClient();
+
+const navigationTheme: Theme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    primary: colors.primary,
+    background: colors.bg,
+    card: colors.surface,
+    text: colors.text,
+    border: colors.border,
+    notification: colors.spark,
+  },
+};
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -9,6 +29,7 @@ export default function App() {
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
+        'PlusJakartaSans-Bold': require('./assets/fonts/PlusJakartaSans-Bold.ttf'),
         'PlusJakartaSans-Light': require('./assets/fonts/PlusJakartaSans-Light.ttf'),
         'PlusJakartaSans-Regular': require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
         'PlusJakartaSans-Medium': require('./assets/fonts/PlusJakartaSans-Medium.ttf'),
@@ -21,11 +42,21 @@ export default function App() {
 
   if (!fontsLoaded) {
     return (
-      <View style={{ flex: 1, backgroundColor: '#0E1A0F', alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator color="#4A9B5F" />
+      <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center' }}>
+        <StatusBar barStyle="light-content" backgroundColor={colors.bg} />
+        <ActivityIndicator color={colors.primary} />
       </View>
     );
   }
 
-  return <AppNavigator />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaProvider>
+        <NavigationContainer theme={navigationTheme}>
+          <StatusBar barStyle="light-content" backgroundColor={colors.bg} />
+          <RootNavigator />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </QueryClientProvider>
+  );
 }

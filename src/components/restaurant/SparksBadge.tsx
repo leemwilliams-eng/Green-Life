@@ -1,27 +1,16 @@
-// src/components/restaurant/SparksBadge.tsx
-// Green Life — Sparks badge + animated award toast
-// "Every Spark starts a fire." 🔥
-// Uses colors.spark (#F59E0B amber gold) from the existing theme.
-
 import React, { useEffect, useRef } from "react";
-import { View, Text, StyleSheet, Animated } from "react-native";
-import { colors } from "@/theme/colors";
+import { Animated, StyleSheet, Text, View } from "react-native";
+
+import { colors, typography, withAlpha } from "@/theme";
 import { useSparkTotal } from "@/hooks/useSparks";
 
-// ── SparksBadge ───────────────────────────────────────────────────────────────
-/**
- * Persistent badge for the Home screen showing the running Sparks total.
- * Reads directly from Zustand — no loading state, always instant.
- *
- * Usage: <SparksBadge />
- */
 export function SparksBadge({ total: totalProp }: { total?: number }) {
   const storeTotal = useSparkTotal();
   const total = totalProp ?? storeTotal;
 
   return (
     <View style={badge.container}>
-      <Text style={badge.flame}>🔥</Text>
+      <Text style={badge.mark}>S</Text>
       <Text style={badge.count}>{total}</Text>
       <Text style={badge.label}>Sparks</Text>
     </View>
@@ -32,34 +21,28 @@ const badge = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.spark + "22",
+    backgroundColor: withAlpha(colors.spark, 0.12),
+    borderColor: withAlpha(colors.spark, 0.28),
     borderRadius: 20,
+    borderWidth: 1,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    gap: 4,
+    gap: 6,
   },
-  flame:  { fontSize: 16 },
-  count:  { fontSize: 16, fontWeight: "800", color: colors.spark },
-  label:  { fontSize: 13, fontWeight: "600", color: colors.spark },
+  mark: {
+    ...typography.caption,
+    color: colors.spark,
+  },
+  count: {
+    ...typography.label,
+    color: colors.spark,
+  },
+  label: {
+    ...typography.caption,
+    color: colors.spark,
+  },
 });
 
-// ── SparksToast ───────────────────────────────────────────────────────────────
-/**
- * Animated toast that slides in after a successful scan.
- * Auto-dismisses after 2.5 seconds.
- *
- * Usage in PhotoCaptureScreen or CandidateResultsScreen:
- *   const { data } = useFoodPhotoScan();
- *   const sparks = data?.meta?.sparks;
- *
- *   <SparksToast
- *     awarded={sparks?.awarded ?? 0}
- *     newTotal={sparks?.newTotal ?? 0}
- *     isFirstScan={sparks?.isFirstScan ?? false}
- *     visible={showToast}
- *     onHide={() => setShowToast(false)}
- *   />
- */
 interface SparksToastProps {
   awarded: number;
   newTotal: number;
@@ -70,38 +53,41 @@ interface SparksToastProps {
 
 export function SparksToast({ awarded, newTotal, isFirstScan, visible, onHide }: SparksToastProps) {
   const slideAnim = useRef(new Animated.Value(-120)).current;
-  const fadeAnim  = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (!visible) return;
 
     Animated.parallel([
       Animated.spring(slideAnim, { toValue: 0, useNativeDriver: true, tension: 80, friction: 10 }),
-      Animated.timing(fadeAnim,  { toValue: 1, duration: 200, useNativeDriver: true }),
+      Animated.timing(fadeAnim, { toValue: 1, duration: 200, useNativeDriver: true }),
     ]).start();
 
     const timer = setTimeout(() => {
       Animated.parallel([
         Animated.timing(slideAnim, { toValue: -120, duration: 300, useNativeDriver: true }),
-        Animated.timing(fadeAnim,  { toValue: 0,    duration: 300, useNativeDriver: true }),
+        Animated.timing(fadeAnim, { toValue: 0, duration: 300, useNativeDriver: true }),
       ]).start(onHide);
     }, 2500);
 
     return () => clearTimeout(timer);
-  }, [visible]);
+  }, [fadeAnim, onHide, slideAnim, visible]);
 
   if (!visible) return null;
 
   return (
     <Animated.View style={[toast.container, { transform: [{ translateY: slideAnim }], opacity: fadeAnim }]}>
       <View style={toast.inner}>
-        <Text style={toast.flame}>🔥</Text>
+        <View style={toast.iconWrap}>
+          <Text style={toast.icon}>S</Text>
+        </View>
         <View style={toast.text}>
           <Text style={toast.awarded}>+{awarded} Spark{awarded !== 1 ? "s" : ""}</Text>
-          {isFirstScan
-            ? <Text style={toast.sub}>🎉 First scan bonus! Every Spark starts a fire.</Text>
-            : <Text style={toast.sub}>{newTotal} total Sparks</Text>
-          }
+          {isFirstScan ? (
+            <Text style={toast.sub}>First scan bonus. Every spark starts a fire.</Text>
+          ) : (
+            <Text style={toast.sub}>{newTotal} total Sparks</Text>
+          )}
         </View>
       </View>
     </Animated.View>
@@ -129,8 +115,28 @@ const toast = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     elevation: 8,
   },
-  flame:   { fontSize: 28 },
-  text:    { flex: 1 },
-  awarded: { fontSize: 20, fontWeight: "800", color: colors.bg },
-  sub:     { fontSize: 13, color: colors.bg + "CC", marginTop: 2 },
+  iconWrap: {
+    alignItems: "center",
+    backgroundColor: withAlpha(colors.bg, 0.12),
+    borderRadius: 18,
+    height: 36,
+    justifyContent: "center",
+    width: 36,
+  },
+  icon: {
+    ...typography.label,
+    color: colors.bg,
+  },
+  text: {
+    flex: 1,
+  },
+  awarded: {
+    ...typography.title,
+    color: colors.bg,
+  },
+  sub: {
+    ...typography.caption,
+    color: withAlpha(colors.bg, 0.8),
+    marginTop: 2,
+  },
 });

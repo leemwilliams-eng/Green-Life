@@ -1,4 +1,4 @@
-﻿import { Pressable, StyleSheet, Text } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 
 import { colors, radius, spacing, typography } from "@/theme";
 
@@ -12,11 +12,12 @@ interface SecondaryButtonProps {
 export function SecondaryButton({ label, onPress, variant = "default", fullWidth = false }: SecondaryButtonProps) {
   return (
     <Pressable
-      style={[
+      style={({ pressed }) => [
         styles.button,
         variant === "accent" ? styles.buttonAccent : null,
         variant === "ghost" ? styles.buttonGhost : null,
         fullWidth ? styles.fullWidth : null,
+        pressed ? styles.buttonPressed : null,
       ]}
       onPress={onPress}
     >
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     borderWidth: 1,
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md
+    paddingVertical: spacing.md,
   },
   buttonAccent: {
     backgroundColor: "transparent",
@@ -45,17 +46,20 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderColor: colors.border,
   },
+  buttonPressed: {
+    opacity: 0.8,
+  },
   fullWidth: {
     alignSelf: "stretch",
   },
   label: {
     ...typography.label,
-    color: colors.text
+    color: colors.text,
   },
   labelAccent: {
     color: colors.primary,
   },
   labelGhost: {
     color: colors.textMuted,
-  }
+  },
 });

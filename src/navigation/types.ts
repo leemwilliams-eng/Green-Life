@@ -1,6 +1,8 @@
-﻿import type { ProductSummary } from "@/types/domain";
+import type { ProductSummary } from "@/types/domain";
 
 export type RootStackParamList = {
+  Splash: undefined;
+  Login: undefined;
   Onboarding: undefined;
   Permissions: undefined;
   Auth: undefined;
@@ -18,6 +20,7 @@ export type RootStackParamList = {
 export type MainTabParamList = {
   Home: undefined;
   Search: undefined;
-  Saved: undefined;
+  Scan: undefined;
+  Community: undefined;
   Profile: undefined;
 };

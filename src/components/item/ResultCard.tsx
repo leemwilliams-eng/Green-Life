@@ -1,7 +1,7 @@
-﻿import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { MatchBadge } from "@/components/item/MatchBadge";
-import { colors, radius, shadows, spacing, typography } from "@/theme";
+import { colors, radius, shadows, spacing, typography, withAlpha } from "@/theme";
 import type { ProductSummary } from "@/types/domain";
 
 interface ResultCardProps {
@@ -11,7 +11,7 @@ interface ResultCardProps {
 
 export function ResultCard({ item, onPress }: ResultCardProps) {
   return (
-    <Pressable style={styles.card} onPress={onPress}>
+    <Pressable style={({ pressed }) => [styles.card, pressed ? styles.cardPressed : null]} onPress={onPress}>
       <Text style={styles.title}>{item.name}</Text>
       {!!item.brand && <Text style={styles.subtitle}>{item.brand}</Text>}
       <View style={styles.badgeWrap}>
@@ -25,10 +25,15 @@ const styles = StyleSheet.create({
   card: {
     ...shadows.card,
     backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: radius.lg,
+    borderWidth: 1,
     gap: spacing.sm,
-    marginBottom: spacing.md,
     padding: spacing.lg
+  },
+  cardPressed: {
+    backgroundColor: withAlpha(colors.primary, 0.1),
+    borderColor: withAlpha(colors.primary, 0.32)
   },
   title: {
     ...typography.title

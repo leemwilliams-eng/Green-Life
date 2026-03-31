@@ -4,10 +4,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { colors, spacing } from "@/theme";
 
-export function Screen({ children }: PropsWithChildren) {
+interface ScreenProps extends PropsWithChildren {
+  includeBottomInset?: boolean;
+}
+
+export function Screen({ children, includeBottomInset = true }: ScreenProps) {
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top", "right", "bottom", "left"]}>
-      <View style={styles.content}>{children}</View>
+    <SafeAreaView
+      style={styles.safeArea}
+      edges={includeBottomInset ? ["top", "right", "bottom", "left"] : ["top", "right", "left"]}
+    >
+      <View style={[styles.content, includeBottomInset ? styles.contentWithBottomInset : styles.contentNoBottomInset]}>
+        {children}
+      </View>
     </SafeAreaView>
   );
 }
@@ -19,6 +28,13 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: spacing.lg
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg
+  },
+  contentNoBottomInset: {
+    paddingBottom: 0
+  },
+  contentWithBottomInset: {
+    paddingBottom: spacing.lg
   }
 });
