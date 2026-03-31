@@ -100,17 +100,20 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xxl,
   },
   header: {
+    alignItems: "center",
     gap: spacing.sm,
   },
   eyebrow: {
     ...typography.caption,
     color: colors.primaryStrong,
     letterSpacing: 1.4,
+    textAlign: "center",
     textTransform: "uppercase",
   },
   subhead: {
     ...typography.body,
     color: colors.textMuted,
+    textAlign: "center",
   },
   formCard: {
     backgroundColor: colors.surface,
